@@ -10,7 +10,7 @@ const Review = db.define('review', {
     }
   },
   rating: {
-    type: Sequelize.DECIMAL,
+    type: Sequelize.FLOAT,
     allowNull: false,
     validate: {
       min: 0.0,
