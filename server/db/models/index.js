@@ -1,4 +1,5 @@
 const User = require('./user')
+const Celebrity = require('./celebrity')
 const Activity = require('./activity')
 const Review = require('./review')
 
@@ -9,6 +10,10 @@ const Review = require('./review')
  *    BlogPost.belongsTo(User)
  */
 
+// Activity.belongsTo(Celebrity)
+// Celebrity.hasMany(Activity)
+// User.belongsTo(Celebrity, {through: Review})
+
 /**
  * We'll export all of our models here, so that any time a module needs a model,
  * we can just require it from 'db/models'
@@ -17,6 +22,7 @@ const Review = require('./review')
  */
 module.exports = {
   User,
+  Celebrity,
   Activity,
   Review
 }

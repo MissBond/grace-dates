@@ -3,10 +3,37 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const User = db.define('user', {
+  firstName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    // this was failing, can we fix it?
+    // validate: {
+    //   isEmpty: false
+    // }
+  },
+  lastName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    // this was failing, can we fix it?
+    // validate: {
+    //   isEmpty: false
+    // }
+  },
+  displayName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    // this was failing, can we fix it?
+    // validate: {
+    //   isEmpty: false
+    // }
+  },
   email: {
     type: Sequelize.STRING,
     unique: true,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
   },
   password: {
     type: Sequelize.STRING,
@@ -63,5 +90,13 @@ const setSaltAndPassword = user => {
   }
 }
 
+const setDisplayName = user => {
+  if(!user.displayName) {
+    user.displayName = user.firstName + ' ' + user.lastName
+  }
+}
+
 User.beforeCreate(setSaltAndPassword)
 User.beforeUpdate(setSaltAndPassword)
+User.beforeCreate(setDisplayName)
+User.beforeUpdate(setDisplayName)
