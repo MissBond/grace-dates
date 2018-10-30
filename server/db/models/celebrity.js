@@ -6,14 +6,14 @@ const Celebrity = db.define('celebrity', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      isEmpty: false
+      notEmpty: true
     }
   },
   lastName: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      isEmpty: false
+      notEmpty: true
     }
   },
   imageUrl: {
@@ -25,14 +25,14 @@ const Celebrity = db.define('celebrity', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      isEmpty: false
+      notEmpty: true
     }
   },
   gender: {
     type: Sequelize.ENUM('Female', 'Male', 'Other'),
     allowNull: false,
     validate: {
-      isEmpty: false
+      notEmpty: true
     }
   },
   netWorthMillions: {
@@ -42,7 +42,7 @@ const Celebrity = db.define('celebrity', {
     type: Sequelize.TEXT,
     allowNull: false,
     validate: {
-      isEmpty: false
+      notEmpty: true
     }
   }
 })
