@@ -60,6 +60,9 @@ const createApp = () => {
       saveUninitialized: false
     })
   )
+
+  //we can access sessionStorage in the front end to set key-value pairs for the session storage
+  
   app.use(passport.initialize())
   app.use(passport.session())
 
