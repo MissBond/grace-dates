@@ -27,21 +27,6 @@ router.get('/:userId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
-  try {
-    const newUser = await User.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      displayName: req.body.displayName,
-      email: req.body.email,
-      isAdmin: req.body.isAdmin
-    });
-    res.json(newUser);
-  } catch (err) {
-    next(err);
-  }
-});
-
 
 router.delete('/:userId', function(req, res, next) {
   User.destroy({
