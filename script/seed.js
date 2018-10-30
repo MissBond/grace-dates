@@ -1,15 +1,79 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Celebrity, Review} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123', firstName: 'Cody', lastName: 'Test'}),
-    User.create({email: 'murphy@email.com', password: '123', firstName: 'Murphy', lastName: 'Test'})
+    User.create({
+      email: 'cody@email.com',
+      password: '123',
+      firstName: 'Cody',
+      lastName: 'Test',
+      isAdmin: true
+    }),
+    User.create({
+      email: 'murphy@email.com',
+      password: '123',
+      firstName: 'Murphy',
+      lastName: 'Test',
+      isAdmin: false
+    })
+  ])
+
+  const celebrities = await Promise.all([
+    Celebrity.create({
+      firstName: 'Drake',
+      lastName: 'Drizzy',
+      imageUrl:
+        'https://ih1.redbubble.net/image.493223166.4227/st%2Csmall%2C215x235-pad%2C210x230%2Cf8f8f8.lite-1u1.jpg',
+      occupation: 'Rapper',
+      gender: 'Male',
+      netWorthMillions: 500,
+      description: 'Litty rapper. Cool af.'
+    }),
+    Celebrity.create({
+      firstName: 'John',
+      lastName: 'Stamos',
+      imageUrl:
+        'https://ih1.redbubble.net/image.493223166.4227/st%2Csmall%2C215x235-pad%2C210x230%2Cf8f8f8.lite-1u1.jpg',
+      occupation: 'Actor',
+      gender: 'Male',
+      netWorthMillions: 800,
+      description: 'John is the best. Good date to go on!'
+    }),
+    Celebrity.create({
+      firstName: 'Abraham',
+      lastName: 'Lincoln',
+      imageUrl: 'https://civilwartalk.com/attachments/image-jpeg.107281/',
+      occupation: 'historical figure',
+      gender: 'Male',
+      netWorthMillions: 700,
+      description:
+        'I have stepped out upon this platform that I may see you and that you may see me, and in the arrangement I have the best of the bargain'
+    }),
+    Celebrity.create({
+      firstName: 'Maryl',
+      lastName: 'Streep',
+      imageUrl:
+        'https://ih1.redbubble.net/image.493223166.4227/st%2Csmall%2C215x235-pad%2C210x230%2Cf8f8f8.lite-1u1.jpg',
+      occupation: 'Actress',
+      gender: 'Female',
+      netWorthMillions: 600,
+      description: 'Mamma Mia, here I go again!'
+    })
+  ])
+
+  const reviews = await Promise.all([
+    Review.create({
+      header: 'Great Date!',
+      rating: 4.7,
+      date: 2018 - 10 - 31,
+      description: 'Had a great time!'
+    })
   ])
 
   console.log(`seeded ${users.length} users`)
