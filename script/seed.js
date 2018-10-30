@@ -28,7 +28,7 @@ async function seed() {
     Celebrity.create({
       firstName: 'Drake',
       lastName: 'Drizzy',
-      imgUrl:
+      imageUrl:
         'https://ih1.redbubble.net/image.493223166.4227/st%2Csmall%2C215x235-pad%2C210x230%2Cf8f8f8.lite-1u1.jpg',
       occupation: 'Rapper',
       gender: 'Male',
@@ -38,7 +38,7 @@ async function seed() {
     Celebrity.create({
       firstName: 'John',
       lastName: 'Stamos',
-      imgUrl:
+      imageUrl:
         'https://ih1.redbubble.net/image.493223166.4227/st%2Csmall%2C215x235-pad%2C210x230%2Cf8f8f8.lite-1u1.jpg',
       occupation: 'Actor',
       gender: 'Male',
@@ -58,12 +58,12 @@ async function seed() {
     Celebrity.create({
       firstName: 'Maryl',
       lastName: 'Streep',
-      imgUrl:
+      imageUrl:
         'https://ih1.redbubble.net/image.493223166.4227/st%2Csmall%2C215x235-pad%2C210x230%2Cf8f8f8.lite-1u1.jpg',
       occupation: 'Actress',
       gender: 'Female',
       netWorthMillions: 600,
-      description: 'Litty rapper. Cool af.'
+      description: 'Mamma Mia, here I go again!'
     })
   ])
 
