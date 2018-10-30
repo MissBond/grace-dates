@@ -6,26 +6,23 @@ const User = db.define('user', {
   firstName: {
     type: Sequelize.STRING,
     allowNull: false,
-    // this was failing, can we fix it?
-    // validate: {
-    //   isEmpty: false
-    // }
+    validate: {
+      notEmpty: true
+    }
   },
   lastName: {
     type: Sequelize.STRING,
     allowNull: false,
-    // this was failing, can we fix it?
-    // validate: {
-    //   isEmpty: false
-    // }
+    validate: {
+      notEmpty: true
+    }
   },
   displayName: {
     type: Sequelize.STRING,
     allowNull: false,
-    // this was failing, can we fix it?
-    // validate: {
-    //   isEmpty: false
-    // }
+    validate: {
+      notEmpty: true
+    }
   },
   email: {
     type: Sequelize.STRING,
@@ -34,6 +31,10 @@ const User = db.define('user', {
     validate: {
       isEmail: true
     }
+  },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   },
   password: {
     type: Sequelize.STRING,
