@@ -21,7 +21,7 @@ const User = db.define('user', {
   },
   displayName: {
     type: Sequelize.STRING,
-    allowNull: false,
+    // allowNull: false,
     // this was failing, can we fix it?
     // validate: {
     //   isEmpty: false
