@@ -98,5 +98,4 @@ const setDisplayName = user => {
 
 User.beforeCreate(setSaltAndPassword)
 User.beforeUpdate(setSaltAndPassword)
-User.beforeCreate(setDisplayName)
-User.beforeUpdate(setDisplayName)
+User.beforeValidate(setDisplayName)
