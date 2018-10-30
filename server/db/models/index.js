@@ -1,5 +1,7 @@
 const User = require('./user')
 const Celebrity = require('./celebrity')
+const Activity = require('./activity')
+const Review = require('./review')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -20,5 +22,7 @@ const Celebrity = require('./celebrity')
  */
 module.exports = {
   User,
-  Celebrity
+  Celebrity,
+  Activity,
+  Review
 }
