@@ -9,6 +9,7 @@ import AddCelebrityForm from './addCelebrityForm';
 class AllCelebrities extends React.Component {
     
   componentDidMount() {
+    console.log(this.props)
     this.props.loadCelebrities()
     //this was part of the attempt to bring in logged in user data
     // const user = this.props.loadUser()
@@ -55,7 +56,10 @@ class AllCelebrities extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {celebrities: state.celebrities}
+  return {
+    celebrities: state.celebrities,
+    isAdmin: state.user.isAdmin
+  }
 }
 
 const mapDispatchToProps = dispatch => {

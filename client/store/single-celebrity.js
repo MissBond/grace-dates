@@ -10,17 +10,20 @@ const REMOVE_CELEBRITY = 'REMOVE_CELEBRITY'
 /**
  * INITIAL STATE
  */
-const defaultCelebrity = {}
+const initialState = {
+  oneCelebrity: {}
+}
+// const defaultCelebrity = {}
 
 /**
  * ACTION CREATORS
  */
-const getCelebrity = celebrity => ({type: GET_CELEBRITY, celebrity})
-const updateCelebrity = updatedCelebrity => ({
+export const getCelebrity = celebrity => ({type: GET_CELEBRITY, celebrity})
+export const updateCelebrity = updatedCelebrity => ({
   type: UPDATE_CELEBRITY,
   updatedCelebrity
 })
-const removeCelebrity = celebrityId => ({type: REMOVE_CELEBRITY, celebrityId})
+export const removeCelebrity = celebrityId => ({type: REMOVE_CELEBRITY, celebrityId})
 
 /**
  * THUNK CREATORS
@@ -49,14 +52,15 @@ export const removeSelectedCelebrity = celebrityId => {
 /**
  * REDUCER
  */
-export default function(state = defaultCelebrity, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case GET_CELEBRITY:
-      return action.celebrity
+      return {...state, oneCelebrity: action.celebrity}
     case UPDATE_CELEBRITY:
-        return action.updatedCelebrity //this is a placeholder, we will need to update the list of celebrities in the store (i.e. update information by matching on id)
+      return {...state, oneCelebrity: action.updatedCelebrity}
+        // return action.updatedCelebrity //this is a placeholder, we will need to update the list of celebrities in the store (i.e. update information by matching on id)
     case REMOVE_CELEBRITY:
-      return defaultCelebrity //this is a placeholder, we will need to update the list of celebrities in the store (i.e. delete celebrity by matching on id)
+      return {...state, celebrities: state.celebrities.filter(elem => elem.id !== action.id)}
     default:
       return state
   }

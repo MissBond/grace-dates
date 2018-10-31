@@ -2,8 +2,7 @@ import axios from 'axios';
 
 //initial state
 const initialState = {
-    celebrities: [],
-    oneCelebrity: {}
+    celebrities: []
 }
 
 //action types
