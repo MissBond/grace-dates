@@ -1,13 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchAllCelebrities} from '../store/celebrities'
+import {fetchAllCelebrities, setVisibilityFilter} from '../store/celebrities'
 //this was an attempt to bring in logged in user data
 // import {me} from '../store/user'
 import {Link} from 'react-router-dom'
-import AddCelebrityForm from './addCelebrityForm';
+import AddCelebrityForm from './addCelebrityForm'
 
 class AllCelebrities extends React.Component {
-    
   componentDidMount() {
     this.props.loadCelebrities()
     //this was part of the attempt to bring in logged in user data
@@ -21,15 +20,28 @@ class AllCelebrities extends React.Component {
   }
 
   render() {
-    const {celebrities} = this.props.celebrities
+    const {celebrities, visibilityFilter} = this.props.celebrities
+    const filteredCelebrities =
+      visibilityFilter === 'All'
+        ? celebrities
+        : visibilityFilter === 'Female'
+          ? celebrities.filter(celebrity => celebrity.gender === 'Female')
+          : celebrities.filter(celebrity => celebrity.gender === 'Male')
     return (
       <div>
         <h1>Choose Your Date!</h1>
         <div>
+          <select onChange={event => this.props.changeView(event.target.value)}>
+            <option value="All">All</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+          </select>
+        </div>
+        <div>
           <ul>
-            {celebrities.map(celebrity => (
+            {filteredCelebrities.map(celebrity => (
               <div key={celebrity.id}>
-                <button type='button'>Add to Cart</button>
+                <button type="button">Add to Cart</button>
                 <li key={celebrity.id}>
                   <Link to={`/celebrities/${celebrity.id}`}>{`${
                     celebrity.firstName
@@ -48,21 +60,25 @@ class AllCelebrities extends React.Component {
             ))}
           </ul>
         </div>
-        <AddCelebrityForm />
+        {this.props.isAdmin && <AddCelebrityForm />}
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  return {celebrities: state.celebrities}
+  return {
+    celebrities: state.celebrities,
+    isAdmin: state.user.isAdmin
+  }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadCelebrities: () => dispatch(fetchAllCelebrities())
+    loadCelebrities: () => dispatch(fetchAllCelebrities()),
     //this was us trying to bring in user information
     // loadUser: async () => dispatch(await me())
+    changeView: status => dispatch(setVisibilityFilter(status))
   }
 }
 

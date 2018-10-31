@@ -3,16 +3,19 @@ import axios from 'axios';
 //initial state
 const initialState = {
     celebrities: [],
-    oneCelebrity: {}
+    oneCelebrity: {},
+    visibilityFilter: 'All'
 }
 
 //action types
 const GET_ALL_CELEBRITIES = 'GET_ALL_CELEBRITIES';
 const ADD_ONE_CELEBRITY = 'ADD_ONE_CELEBRITY'
+const SET_FILTER = 'SET_FILTER'
 
 //action creators
 export const getAllCelebrities = (celebrities) => ({type: GET_ALL_CELEBRITIES, celebrities})
 export const addedOneCelebrity = (oneCelebrity) => ({type: ADD_ONE_CELEBRITY, oneCelebrity})
+export const setVisibilityFilter = (status) => ({type: SET_FILTER, status})
 
 //async action creators
 export const fetchAllCelebrities = () => async (dispatch) => {
@@ -40,6 +43,8 @@ export default function (state = initialState, action) {
             return {...state, celebrities: action.celebrities}
         case ADD_ONE_CELEBRITY:
             return {...state, celebrities: [...state.celebrities, action.oneCelebrity]}
+        case SET_FILTER:
+            return {...state, visibilityFilter: action.status}
         default: {
             return state;
         }
