@@ -2,9 +2,8 @@ import axios from 'axios';
 
 //initial state
 const initialState = {
-    celebrities: [],
-    oneCelebrity: {},
-    visibilityFilter: 'All'
+    visibilityFilter: 'All',
+    celebrities: []
 }
 
 //action types
