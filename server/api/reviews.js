@@ -4,6 +4,7 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log(req.params)
     const reviews = await Review.findAll({
         where: {celebrityId: req.params.celebrityId}
     })
