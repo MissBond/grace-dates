@@ -2,20 +2,19 @@ import React from 'react'
 import {connect} from 'react-redux'
 import UpdateCelebrity from './updateCelebrity'
 import {fetchCelebrity, removeSelectedCelebrity} from '../store'
+import AddCart from './addCart'
 
 class SingleCelebrity extends React.Component {
-
   componentDidMount() {
     const celebrityId = this.props.match.params.celebrityId
     this.props.fetch(celebrityId)
   }
 
-  render() {  
+  render() {
     const {oneCelebrity} = this.props.celebrity
     const celebrity = oneCelebrity
 
-    return (
-      celebrity ?
+    return celebrity ? (
       <div id="celebrity-single-view-container">
         <h1>
           {celebrity.firstName} {celebrity.lastName}
@@ -26,6 +25,11 @@ class SingleCelebrity extends React.Component {
         <div>{celebrity.netWorthMillions}</div>
         <p>{celebrity.description}</p>
         {this.props.isAdmin && <UpdateCelebrity />}
+        <AddCart
+          celebrity={celebrity}
+          cart={this.state.cart}
+          addToCart={this.addToCart}
+        />
         <button
           onClick={() => this.props.deleted(celebrity.id)}
           type="button"
@@ -34,7 +38,8 @@ class SingleCelebrity extends React.Component {
           Delete
         </button>
       </div>
-      :<p>no celeb</p>
+    ) : (
+      <p>no celeb</p>
     )
   }
 }
