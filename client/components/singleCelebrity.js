@@ -25,7 +25,7 @@ class SingleCelebrity extends React.Component {
         <div>{celebrity.gender}</div>
         <div>{celebrity.netWorthMillions}</div>
         <p>{celebrity.description}</p>
-        <UpdateCelebrity />
+        {this.props.isAdmin && <UpdateCelebrity />}
         <button
           onClick={() => this.props.deleted(celebrity.id)}
           type="button"
@@ -40,7 +40,10 @@ class SingleCelebrity extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {celebrity: state.oneCelebrity}
+  return {
+    celebrity: state.oneCelebrity,
+    isAdmin: state.user.isAdmin
+  }
 }
 
 const mapDispatchToProps = dispatch => {
