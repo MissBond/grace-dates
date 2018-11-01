@@ -2,6 +2,8 @@ const User = require('./user')
 const Celebrity = require('./celebrity')
 const Activity = require('./activity')
 const Review = require('./review')
+const Order = require('./order')
+const CelebrityOrder = require('./celebrity-order')
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -19,9 +21,17 @@ Review.belongsTo(Celebrity)
 Celebrity.hasMany(Activity)
 Activity.belongsTo(Celebrity)
 
+Celebrity.belongsToMany(Order, {through: CelebrityOrder, foreignKey: "celebrityId"})
+Order.belongsToMany(Celebrity, {through: CelebrityOrder, foreignKey: "orderId"})
+
+User.hasMany(Order)
+Order.belongsTo(User)
+
 module.exports = {
   User,
   Celebrity,
   Activity,
-  Review
+  Review,
+  Order,
+  CelebrityOrder
 }

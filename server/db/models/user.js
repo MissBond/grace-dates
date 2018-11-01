@@ -1,6 +1,7 @@
 const crypto = require('crypto')
 const Sequelize = require('sequelize')
 const db = require('../db')
+const {Order} = require('../models')
 
 const User = db.define('user', {
   firstName: {
