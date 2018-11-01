@@ -27,6 +27,12 @@ export class AddCelebrityForm extends React.Component {
         event.preventDefault()
         //we should put some error handling here to tell user which fields are required
         this.props.postCelebrity(this.state)
+        Array.from(document.getElementsByTagName('input')).map(elem => {
+            if (elem.type === 'radio') {
+                elem.checked = false
+                return elem
+            }
+        })
         this.setState({
             firstName: '',
             lastName: '',
@@ -73,6 +79,11 @@ export class AddCelebrityForm extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        celebrities: state.celebrities
+    }
+}
 const mapDispatchToProps = (dispatch) => {
     return {
         postCelebrity: (celebrity) => dispatch(postOneCelebrity(celebrity))
@@ -82,4 +93,4 @@ const mapDispatchToProps = (dispatch) => {
 
 
 
-export default connect(null, mapDispatchToProps)(AddCelebrityForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AddCelebrityForm);
