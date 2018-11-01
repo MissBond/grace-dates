@@ -26,6 +26,7 @@ export const fetchAllOrders = user => async dispatch => {
   }
 }
 export const fetchUpdatedOrder = (user, updates, orderId) => {
+    //updates should have orderId, productId, and quantity
   return async dispatch => {
     const {data: updatedOrder} = await axios.put(
       `/api/users/${user.id}/orders/${orderId}/celebrities`,
