@@ -71,7 +71,6 @@ router.put('/:userId', async (req, res, next) => {
 
 router.get('/:userId/orders', async (req, res, next) => {
   try {
-    console.log(req.params)
     const orders = await Order.findAll({
       where: {userId: req.params.userId},
       include: [{model: Celebrity}]
@@ -84,7 +83,6 @@ router.get('/:userId/orders', async (req, res, next) => {
 
 router.get('/:userId/orders/:orderId', async (req, res, next) => {
   try {
-    console.log(req.params)
     const orders = await Order.findById(req.params.orderId, {
       include: [{model: Celebrity}]
     })
