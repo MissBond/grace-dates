@@ -26,7 +26,7 @@ router.get('/:userId', async (req, res, next) => {
     })
     if (user.orders.length) {
       res.json(user)
-    } else {
+    } else if (user.id) {
       await Order.create({userId: user.id})
       const updatedUser = await User.findById(+req.params.userId, {
         attributes: ['id', 'email'],
@@ -118,17 +118,18 @@ router.put('/:userId/orders/:orderId', async (req, res, next) => {
   }
 })
 
+//to update products with existing products
+
 router.put('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
   try {
     const orderId = req.params.orderId
-    const updates = req.body
-    const orderToUpdate = await Order.findById(orderId, {
-      include:[{Model: Celebrity}]
+    //req.body should have orderId, productId, and quantity
+    await CelebrityOrder.create(req.body)
+    const updatedOrder = await Order.findById(orderId, {
+      include: [{Model: Celebrity}]
     })
-    const updatedOrder = await orderToUpdate.update(updates)
     res.json(updatedOrder)
   } catch (err) {
     next(err)
   }
 })
-

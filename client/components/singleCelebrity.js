@@ -25,7 +25,7 @@ class SingleCelebrity extends React.Component {
         <div>{celebrity.gender}</div>
         <div>{celebrity.netWorthMillions}</div>
         <p>{celebrity.description}</p>
-//         <UpdateCelebrity />
+         {/* <UpdateCelebrity /> */}
         <button
           onClick={() => this.props.deleted(celebrity.id)}
           type="button"
