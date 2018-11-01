@@ -1,15 +1,24 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {fetchAllCelebrities, setVisibilityFilter} from '../store/celebrities'
+import { connect } from 'react-redux'
+import { fetchAllCelebrities, setVisibilityFilter } from '../store/celebrities'
 //this was an attempt to bring in logged in user data
 // import {me} from '../store/user'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import AddCelebrityForm from './addCelebrityForm'
 
+
 class AllCelebrities extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      cart: []
+    }
+    this.populateLocalStorage = this.populateLocalStorage.bind(this);
+  }
   componentDidMount() {
-    console.log(this.props)
+    console.log(this.state)
     this.props.loadCelebrities()
+    this.populateLocalStorage();
     //this was part of the attempt to bring in logged in user data
     // const user = this.props.loadUser()
   }
@@ -20,8 +29,30 @@ class AllCelebrities extends React.Component {
     return (netWorth * 100000 / minsPerYr).toFixed(2)
   }
 
+  addToCart(item) {
+    let cart = this.state.cart;
+    cart.push(item)
+    localStorage.setItem('cart', JSON.stringify(cart));
+    this.setState(cart)
+    console.log(this.state.cart)
+  }
+
+  populateLocalStorage() {
+    for (let key in this.state) {
+      if (localStorage.hasOwnProperty(key)) {
+        let value = localStorage.getItem(key)
+        try {
+          value = JSON.parse(value);
+          this.setState({ [key]: value })
+        } catch (e) {
+          this.setState({ [key]: value })
+        }
+      }
+    }
+  }
+
   render() {
-    const {celebrities, visibilityFilter} = this.props.celebrities
+    const { celebrities, visibilityFilter } = this.props.celebrities
     const filteredCelebrities =
       visibilityFilter === 'All'
         ? celebrities
@@ -42,11 +73,11 @@ class AllCelebrities extends React.Component {
           <ul>
             {filteredCelebrities.map(celebrity => (
               <div key={celebrity.id}>
-                <button type="button">Add to Cart</button>
+                <button onClick={() => this.addToCart(celebrity)} type="button">Add to Cart</button>
                 <li key={celebrity.id}>
                   <Link to={`/celebrities/${celebrity.id}`}>{`${
                     celebrity.firstName
-                  } ${celebrity.lastName}`}</Link>
+                    } ${celebrity.lastName}`}</Link>
                   <br />
                   Occupation: {`${celebrity.occupation}`}
                   <br />
@@ -70,7 +101,8 @@ class AllCelebrities extends React.Component {
 const mapStateToProps = state => {
   return {
     celebrities: state.celebrities,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    cart: state.cart
   }
 }
 
@@ -79,7 +111,7 @@ const mapDispatchToProps = dispatch => {
     loadCelebrities: () => dispatch(fetchAllCelebrities()),
     //this was us trying to bring in user information
     // loadUser: async () => dispatch(await me())
-    changeView: status => dispatch(setVisibilityFilter(status))
+    changeView: status => dispatch(setVisibilityFilter(status)),
   }
 }
 
