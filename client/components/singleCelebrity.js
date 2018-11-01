@@ -5,9 +5,40 @@ import {fetchCelebrity, removeSelectedCelebrity} from '../store'
 import AddCart from './addCart'
 
 class SingleCelebrity extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      cart: []
+    }
+    this.populateLocalStorage = this.populateLocalStorage.bind(this)
+  }
+
   componentDidMount() {
+    this.populateLocalStorage()
     const celebrityId = this.props.match.params.celebrityId
     this.props.fetch(celebrityId)
+  }
+
+  populateLocalStorage() {
+    for (let key in this.state) {
+      if (localStorage.hasOwnProperty(key)) {
+        let value = localStorage.getItem(key)
+        try {
+          value = JSON.parse(value)
+          this.setState({[key]: value})
+        } catch (e) {
+          this.setState({[key]: value})
+        }
+      }
+    }
+  }
+
+  addToCart(item) {
+    let cart = this.state.cart
+    cart.push(item)
+    localStorage.setItem('cart', JSON.stringify(cart))
+    this.setState(cart)
+    console.log(this.state.cart)
   }
 
   render() {
