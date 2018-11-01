@@ -16,7 +16,6 @@ class AllCelebrities extends React.Component {
     this.populateLocalStorage = this.populateLocalStorage.bind(this);
   }
   componentDidMount() {
-    console.log(this.state)
     this.props.loadCelebrities()
     this.populateLocalStorage();
     //this was part of the attempt to bring in logged in user data
