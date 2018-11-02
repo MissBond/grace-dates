@@ -4,6 +4,7 @@ import UpdateCelebrity from './updateCelebrity'
 import {fetchCelebrity, removeSelectedCelebrity} from '../store'
 import Reviews from './reviews'
 import AddCart from './addCart'
+import { runInThisContext } from 'vm';
 
 class SingleCelebrity extends React.Component {
   constructor() {
@@ -62,6 +63,7 @@ class SingleCelebrity extends React.Component {
           cart={this.state.cart}
           addToCart={this.addToCart}
         />
+        <Reviews />
         <button
           onClick={() => this.props.deleted(celebrity.id)}
           type="button"
@@ -69,7 +71,6 @@ class SingleCelebrity extends React.Component {
         >
           Delete
         </button>
-        <Reviews />
       </div>
     ) : (
       <p>no celeb</p>
@@ -80,7 +81,8 @@ class SingleCelebrity extends React.Component {
 const mapStateToProps = state => {
   return {
     celebrity: state.oneCelebrity,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    userId: state.user.id
   }
 }
 

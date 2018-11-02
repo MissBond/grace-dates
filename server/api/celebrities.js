@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Celebrity, Activity} = require('../db/models')
+const {Celebrity, Activity, Review} = require('../db/models')
 module.exports = router
 
 router.use('/:celebrityId/reviews', require('./reviews'))
@@ -60,5 +60,28 @@ router.delete('/:celebrityId', async (req, res, next) => {
     res.status(204).end()
   } catch (err) {
     next(err)
+  }
+})
+
+//user reviews routes
+router.get('/:celebrityId/reviews', async (req, res, next) => {
+  try {
+    const reviews = await Review.findAll({
+      where: {
+        celebrityId: req.params.celebrityId
+      }
+    })
+    res.json(reviews)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/:celebrityId/reviews', async (req, res, next) => {
+  try {
+    const newReview = await Review.create(req.body)
+    res.json(newReview)
+  } catch (error) {
+    next(error)
   }
 })
