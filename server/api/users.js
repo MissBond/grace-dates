@@ -21,17 +21,18 @@ router.get('/', async (req, res, next) => {
 router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.findById(+req.params.userId, {
-      attributes: ['id', 'email'],
+      attributes: ['id', 'email', 'firstName', 'lastName'],
       include: [Order]
     })
     if (user.orders.length) {
       res.json(user)
-    } else if (user.id) {
+    } else {
       await Order.create({userId: user.id})
       const updatedUser = await User.findById(+req.params.userId, {
-        attributes: ['id', 'email'],
+        attributes: ['id', 'email', 'firstName', 'lastName'],
         include: [Order]
       })
+      console.log('updatedUser in route', updatedUser)
       res.json(updatedUser)
     }
   } catch (err) {
@@ -51,15 +52,18 @@ router.delete('/:userId', function(req, res, next) {
     .catch(next)
 })
 
+//removed the isAdmin for now, but when we have the admin page where one can update users, we will need to revisit
+
 router.put('/:userId', async (req, res, next) => {
   try {
     const updatedUser = await User.findById(+req.params.userId)
     await updatedUser.update({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      displayName: req.body.displayName,
-      email: req.body.email,
-      isAdmin: req.body.isAdmin
+      password: req.body.password
+      // displayName: req.body.displayName,
+      // email: req.body.email,
+      // isAdmin: req.body.isAdmin
     })
     res.json(updatedUser)
   } catch (err) {
@@ -92,16 +96,6 @@ router.get('/:userId/orders/:orderId', async (req, res, next) => {
   }
 })
 
-// router.post('/:userId/orders', async (req, res, next) => {
-//   try {
-//     const userId = req.params.userId
-//     const newOrder = await Order.create({userId: userId})
-//     res.json(newOrder)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
 //to change an order to completed
 
 router.put('/:userId/orders/:orderId', async (req, res, next) => {
@@ -118,18 +112,56 @@ router.put('/:userId/orders/:orderId', async (req, res, next) => {
   }
 })
 
-//to update products with existing products
+//to add an item to a cart and send the revised cart back
 
-router.put('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
+router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
   try {
-    const orderId = req.params.orderId
-    //req.body should have orderId, productId, and quantity
-    await CelebrityOrder.create(req.body)
+    const orderId = req.body.orderId
+    const celebrityId = req.body.celebrityId
+    const lineItem = await CelebrityOrder.find({
+      where: {orderId, celebrityId}
+    })
+    console.log(lineItem)
+    if (lineItem) {
+      const newQuantity = lineItem.quantity + 1
+      await lineItem.update({quantity: newQuantity})
+    } else {
+      await CelebrityOrder.create(req.body)
+    }
     const updatedOrder = await Order.findById(orderId, {
-      include: [{Model: Celebrity}]
+      include: [{model: Celebrity}]
     })
     res.json(updatedOrder)
-  } catch (err) {
-    next(err)
+  } catch (error) {
+    next(error)
   }
 })
+
+//to delete an item to a cart and send the revised cart back
+
+router.delete(
+  '/:userId/orders/:orderId/celebrities',
+  async (req, res, next) => {
+    try {
+      const orderId = req.body.orderId
+      const celebrityId = req.body.celebrityId
+      const lineItem = await CelebrityOrder.find({
+        where: {orderId, celebrityId}
+      })
+      if (lineItem.quantity === 1) {
+        await CelebrityOrder.destroy({
+          where: {celebrityId, orderId}
+        })
+      } else {
+        const newQuantity = lineItem.quantity - 1
+        await lineItem.update({quantity: newQuantity})
+      }
+      const updatedOrder = await Order.findById(orderId, {
+        include: [{model: Celebrity}]
+      })
+      res.json(updatedOrder)
+    } catch (error) {
+      next(error)
+    }
+  }
+)
