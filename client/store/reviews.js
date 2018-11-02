@@ -12,10 +12,10 @@ export const addReview = (review) => ({type: ADD_REVIEW, review})
 export const getAllReviews = (reviews) => ({type: GET_ALL_REVIEWS, reviews})
 
 export const fetchReviews = () =>  async (dispatch) => {
-    try {
-        const { data: reviews } = await axios.get('/api/reviews')
-        dispatch(getAllReviews(reviews))
-    }
+    // try {
+    //     const { data: reviews } = await axios.get('/api/reviews')
+    //     dispatch(getAllReviews(reviews))
+    // }
 }
 
 export const postReview = (review) => async (dispatch) => {

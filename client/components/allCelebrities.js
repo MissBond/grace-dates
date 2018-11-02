@@ -13,6 +13,7 @@ class AllCelebrities extends React.Component {
       cart: []
     }
     this.populateLocalStorage = this.populateLocalStorage.bind(this)
+    this.addToCart = this.addToCart.bind(this)
   }
 
   componentDidMount() {
