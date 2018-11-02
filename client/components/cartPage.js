@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link, Redirect} from 'react-router-dom'
-import CheckoutPage from './checkoutPage';
+import CheckoutForm from './checkoutForm';
 
 const CartPage = () => {
   const cartItems = JSON.parse(localStorage.cart)
@@ -25,7 +25,7 @@ const CartPage = () => {
             ))}
           </ol>
           <Link to='/checkout'>
-            <button onClick={() => <CheckoutPage />} type="button">Checkout</button>
+            <button onClick={() => <CheckoutForm />} type="button">Checkout</button>
           </Link>
     </div>
     )
