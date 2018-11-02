@@ -7,32 +7,52 @@ const initialState = {
 }
 
 const GET_ALL_ORDERS = 'GET_ALL_ORDERS'
-const UPDATE_CURRENT_ORDER = 'UPDATE_CURRENT_ORDER'
+const ADD_ITEM = 'ADD_ITEM'
+const DELETE_ITEM = 'DELETE_ITEM'
 const CHECKOUT_CURRENT_ORDER = 'CHECKOUT_CURRENT_ORDER'
+const CLEAR_ORDERS = 'CLEAR_ORDERS'
 
 export const getAllOrders = orders => ({type: GET_ALL_ORDERS, orders})
-export const updateCurrentOrder = order => ({type: UPDATE_CURRENT_ORDER, order})
+export const addItem = order => ({type: ADD_ITEM, order})
+export const deleteItem = order => ({type: DELETE_ITEM, order})
 export const checkoutCurrentOrder = order => ({
   type: CHECKOUT_CURRENT_ORDER,
   order
 })
+export const clearOrders = () => ({type: CLEAR_ORDERS})
 
-export const fetchAllOrders = user => async dispatch => {
+export const fetchAllOrders = userId => async dispatch => {
   try {
-    const {data: orders} = await axios.get(`/api/users/${user.id}/orders`)
+    const {data: orders} = await axios.get(`/api/users/${userId}/orders`)
     dispatch(getAllOrders(orders))
   } catch (error) {
     console.log(error)
   }
 }
-export const fetchUpdatedOrder = (user, updates, orderId) => {
-    //updates should have orderId, productId, and quantity
+export const fetchAddedItem = (userId, orderId, item) => {
   return async dispatch => {
-    const {data: updatedOrder} = await axios.put(
-      `/api/users/${user.id}/orders/${orderId}/celebrities`,
-      updates
-    )
-    dispatch(updateCurrentOrder(updatedOrder))
+    try {
+      const {data: updatedOrder} = await axios.post(
+        `/api/users/${userId}/orders/${orderId}/celebrities`,
+        item
+      )
+      dispatch(addItem(updatedOrder))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+export const fetchDeletedItem = (userId, orderId, item) => {
+  return async dispatch => {
+    try {
+      const {data: updatedOrder} = await axios.delete(
+        `/api/users/${userId}/orders/${orderId}/celebrities`,
+        item
+      )
+      dispatch(deleteItem(updatedOrder))
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 export const postCompletedOrder = (user, orderId) => {
@@ -52,12 +72,16 @@ export default function(state = initialState, action) {
       return {
         ...state,
         orders: action.orders,
-        currentOrder: action.orders.filter(order => order.status === 'Pending')
+        currentOrder: action.orders.filter(
+          order => order.status === 'Pending'
+        )[0]
       }
-    case UPDATE_CURRENT_ORDER:
+    case ADD_ITEM:
       return {...state, currentOrder: action.order} //may need to update orders array here
     case CHECKOUT_CURRENT_ORDER:
       return {...state, currentOrder: action.order}
+    case CLEAR_ORDERS:
+      return {...state, orders: [], currentOrder: {}}
     default:
       return state
   }
