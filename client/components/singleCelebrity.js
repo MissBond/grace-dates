@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import UpdateCelebrity from './updateCelebrity'
 import {fetchCelebrity, removeSelectedCelebrity} from '../store'
+import Reviews from './reviews'
 import AddCart from './addCart'
 
 class SingleCelebrity extends React.Component {
@@ -68,6 +69,7 @@ class SingleCelebrity extends React.Component {
         >
           Delete
         </button>
+        <Reviews />
       </div>
     ) : (
       <p>no celeb</p>
