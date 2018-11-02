@@ -77,7 +77,7 @@ export default function(state = initialState, action) {
         )[0]
       }
     case ADD_ITEM:
-      return {...state, currentOrder: action.order} //may need to update orders array here
+      return {...state, currentOrder: action.order, orders: state.orders.filter(elem => elem.status === 'Completed').push(action.order)}
     case CHECKOUT_CURRENT_ORDER:
       return {...state, currentOrder: action.order}
     case CLEAR_ORDERS:
