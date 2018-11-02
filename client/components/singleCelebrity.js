@@ -2,20 +2,50 @@ import React from 'react'
 import {connect} from 'react-redux'
 import UpdateCelebrity from './updateCelebrity'
 import {fetchCelebrity, removeSelectedCelebrity} from '../store'
+import AddCart from './addCart'
 
 class SingleCelebrity extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      cart: []
+    }
+    this.populateLocalStorage = this.populateLocalStorage.bind(this)
+  }
 
   componentDidMount() {
+    this.populateLocalStorage()
     const celebrityId = this.props.match.params.celebrityId
     this.props.fetch(celebrityId)
   }
 
-  render() {  
+  populateLocalStorage() {
+    for (let key in this.state) {
+      if (localStorage.hasOwnProperty(key)) {
+        let value = localStorage.getItem(key)
+        try {
+          value = JSON.parse(value)
+          this.setState({[key]: value})
+        } catch (e) {
+          this.setState({[key]: value})
+        }
+      }
+    }
+  }
+
+  addToCart(item) {
+    let cart = this.state.cart
+    cart.push(item)
+    localStorage.setItem('cart', JSON.stringify(cart))
+    this.setState(cart)
+    console.log(this.state.cart)
+  }
+
+  render() {
     const {oneCelebrity} = this.props.celebrity
     const celebrity = oneCelebrity
 
-    return (
-      celebrity ?
+    return celebrity ? (
       <div id="celebrity-single-view-container">
         <h1>
           {celebrity.firstName} {celebrity.lastName}
@@ -26,6 +56,11 @@ class SingleCelebrity extends React.Component {
         <div>{celebrity.netWorthMillions}</div>
         <p>{celebrity.description}</p>
         {this.props.isAdmin && <UpdateCelebrity />}
+        <AddCart
+          celebrity={celebrity}
+          cart={this.state.cart}
+          addToCart={this.addToCart}
+        />
         <button
           onClick={() => this.props.deleted(celebrity.id)}
           type="button"
@@ -34,7 +69,8 @@ class SingleCelebrity extends React.Component {
           Delete
         </button>
       </div>
-      :<p>no celeb</p>
+    ) : (
+      <p>no celeb</p>
     )
   }
 }

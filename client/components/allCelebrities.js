@@ -1,11 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchAllCelebrities, setVisibilityFilter} from '../store/celebrities'
-//this was an attempt to bring in logged in user data
-// import {me} from '../store/user'
 import {Link} from 'react-router-dom'
 import AddCelebrityForm from './addCelebrityForm'
 import {fetchAddedItem} from '../store/orders'
+import AddCart from './addCart'
 
 class AllCelebrities extends React.Component {
   constructor() {
@@ -19,8 +18,6 @@ class AllCelebrities extends React.Component {
   componentDidMount() {
     this.props.loadCelebrities()
     this.populateLocalStorage()
-    //this was part of the attempt to bring in logged in user data
-    // const user = this.props.loadUser()
   }
 
   calculatePricePerMin(netWorth) {
@@ -92,9 +89,12 @@ class AllCelebrities extends React.Component {
           <ul>
             {filteredCelebrities.map(celebrity => (
               <div key={celebrity.id}>
-                <button onClick={() => this.addToCart(celebrity)} type="button">
-                  Add to Cart
-                </button>
+                {/* <button onClick={() => this.addToCart(celebrity)} type="button">Add to Cart</button> */}
+                <AddCart
+                  celebrity={celebrity}
+                  cart={this.state.cart}
+                  addToCart={this.addToCart}
+                />
                 <li key={celebrity.id}>
                   <Link to={`/celebrities/${celebrity.id}`}>{`${
                     celebrity.firstName
@@ -132,8 +132,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     loadCelebrities: () => dispatch(fetchAllCelebrities()),
-    //this was us trying to bring in user information
-    // loadUser: async () => dispatch(await me())
     changeView: status => dispatch(setVisibilityFilter(status)),
     addItem: (userId, orderId, item) =>
       dispatch(fetchAddedItem(userId, orderId, item))
