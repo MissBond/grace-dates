@@ -60,42 +60,48 @@ class AllCelebrities extends React.Component {
           : celebrities.filter(celebrity => celebrity.gender === 'Male')
     return (
       <div>
-        <h1>Choose Your Date!</h1>
-        <div>
-          <select onChange={event => this.props.changeView(event.target.value)}>
-            <option value="All">All</option>
-            <option value="Female">Female</option>
-            <option value="Male">Male</option>
-          </select>
-        </div>
-        <div>
-          <ul>
-            {filteredCelebrities.map(celebrity => (
+        <nav className="product-filter">
+          <h1>Choose Your Date!</h1>
+          <div className="sort">
+            <div className="collection-sort">
+              <label>Filter By:</label>
+              <select onChange={event => this.props.changeView(event.target.value)}>
+                <option value="All">All</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+              </select>
+            </div>
+          </div>
+        </nav>
+
+        <section className="products">
+          {filteredCelebrities.map(celebrity => (
+            <div key={celebrity.id} className="product-card">
+
               <div key={celebrity.id}>
-                {/* <button onClick={() => this.addToCart(celebrity)} type="button">Add to Cart</button> */}
-                <AddCart
-                  celebrity={celebrity}
-                  cart={this.state.cart}
-                  addToCart={this.addToCart}
-                />
-                <li key={celebrity.id}>
-                  <Link to={`/celebrities/${celebrity.id}`}>{`${
-                    celebrity.firstName
-                  } ${celebrity.lastName}`}</Link>
-                  <br />
-                  Occupation: {`${celebrity.occupation}`}
-                  <br />
-                  Price Per Minute: ${this.calculatePricePerMin(
-                    celebrity.netWorthMillions
-                  )}
-                  <br />
-                  <img src={celebrity.imageUrl} />
-                </li>
-                <br />
+                <div className="product-info">
+                    <div className="product-image">
+                      <img src={celebrity.imageUrl} />
+                    </div>
+                    <h5>
+                      <Link to={`/celebrities/${celebrity.id}`}>{`${
+                      celebrity.firstName} ${celebrity.lastName}`}</Link>
+                    </h5>
+                    <h6>Occupation: {`${celebrity.occupation}`}</h6>
+                    <h6>Price Per Minute: ${this.calculatePricePerMin(
+                      celebrity.netWorthMillions)}</h6>
+                    <AddCart
+                      celebrity={celebrity}
+                      cart={this.state.cart}
+                      addToCart={this.addToCart}
+                    />
+                </div>
               </div>
-            ))}
-          </ul>
-        </div>
+
+            </div>
+           )
+          )}
+        </section>
         {this.props.isAdmin && <AddCelebrityForm />}
       </div>
     )
