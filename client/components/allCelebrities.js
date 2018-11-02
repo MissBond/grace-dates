@@ -1,10 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchAllCelebrities, setVisibilityFilter} from '../store/celebrities'
-//this was an attempt to bring in logged in user data
-// import {me} from '../store/user'
 import {Link} from 'react-router-dom'
 import AddCelebrityForm from './addCelebrityForm'
+import {fetchAddedItem} from '../store/orders'
 import AddCart from './addCart'
 
 class AllCelebrities extends React.Component {
@@ -15,11 +14,10 @@ class AllCelebrities extends React.Component {
     }
     this.populateLocalStorage = this.populateLocalStorage.bind(this)
   }
+
   componentDidMount() {
     this.props.loadCelebrities()
     this.populateLocalStorage()
-    //this was part of the attempt to bring in logged in user data
-    // const user = this.props.loadUser()
   }
 
   calculatePricePerMin(netWorth) {
@@ -28,26 +26,45 @@ class AllCelebrities extends React.Component {
     return (netWorth * 100000 / minsPerYr).toFixed(2)
   }
 
-  populateLocalStorage() {
-    for (let key in this.state) {
-      if (localStorage.hasOwnProperty(key)) {
-        let value = localStorage.getItem(key)
-        try {
-          value = JSON.parse(value)
-          this.setState({[key]: value})
-        } catch (e) {
-          this.setState({[key]: value})
-        }
+  addToCart(item) {
+    if (this.props.userId) {
+      const addedItem = {
+        orderId: this.state.cart.id,
+        userId: this.props.userId,
+        celebrityId: item.id,
+        quantity: 1
       }
+      this.props.addItem(
+        this.props.userId,
+        this.state.cart.id,
+        addedItem
+      )
+    } else {
+      let cart = this.state.cart
+      cart.push(item)
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.setState(cart)
     }
   }
 
-  addToCart(item) {
-    let cart = this.state.cart
-    cart.push(item)
-    localStorage.setItem('cart', JSON.stringify(cart))
-    this.setState(cart)
-    console.log(this.state.cart)
+  populateLocalStorage() {
+    if (this.props.userId) {
+      this.setState({
+        cart: this.props.currentOrder
+      })
+    } else {
+      for (let key in this.state) {
+        if (localStorage.hasOwnProperty(key)) {
+          let value = localStorage.getItem(key)
+          try {
+            value = JSON.parse(value)
+            this.setState({[key]: value})
+          } catch (e) {
+            this.setState({[key]: value})
+          }
+        }
+      }
+    }
   }
 
   render() {
@@ -106,16 +123,18 @@ const mapStateToProps = state => {
   return {
     celebrities: state.celebrities,
     isAdmin: state.user.isAdmin,
-    cart: state.cart
+    // cart: state.cart,
+    userId: state.user.id,
+    currentOrder: state.orders.currentOrder
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     loadCelebrities: () => dispatch(fetchAllCelebrities()),
-    //this was us trying to bring in user information
-    // loadUser: async () => dispatch(await me())
-    changeView: status => dispatch(setVisibilityFilter(status))
+    changeView: status => dispatch(setVisibilityFilter(status)),
+    addItem: (userId, orderId, item) =>
+      dispatch(fetchAddedItem(userId, orderId, item))
   }
 }
 
