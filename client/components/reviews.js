@@ -96,8 +96,8 @@ class Reviews extends React.Component {
               max="5"
             />
             <label htmlFor="description">Review</label>
-            <input
-              type="text"
+            <textarea
+              // type="text"
               name="description"
               value={this.state.description}
               onChange={this.handleChange}
