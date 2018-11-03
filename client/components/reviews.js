@@ -52,9 +52,8 @@ class Reviews extends React.Component {
       <div>
         Customer Reviews:
         <ol>
-          {!reviews.length
-            ? 'Loading'
-            : reviews.map(elem => {
+          {reviews.length
+            ? reviews.map(elem => {
                 return (
                   <li key={elem.id}>
                     <h3>
@@ -64,10 +63,12 @@ class Reviews extends React.Component {
                     {moment(elem.updatedAt).format('MMM Do YYYY')}
                     <br />
                     {elem.description}
-                    <br />by {this.props.userFirstName} {this.props.userLastName}
+                    <br />by {this.props.userFirstName}{' '}
+                    {this.props.userLastName}
                   </li>
                 )
-              })}
+              })
+            : null}
         </ol>
         {this.props.userId && (
           <form onSubmit={this.handleSubmit}>
@@ -122,7 +123,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     postReview: (userId, celebrityId, header, date, rating, description) =>
-      dispatch(postReview(userId, celebrityId, header, date, rating, description)),
+      dispatch(
+        postReview(userId, celebrityId, header, date, rating, description)
+      ),
     fetchReviews: celebrityId => dispatch(fetchReviews(celebrityId))
   }
 }
