@@ -1,10 +1,10 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import {Link, Redirect} from 'react-router-dom'
 import CheckoutForm from './checkoutForm';
 
-const CartPage = () => {
-  const cartItems = JSON.parse(localStorage.cart)
-
+const CartPage = (props) => {
+  const cartItems = props.userId ? props.currentOrder.celebrities : JSON.parse(localStorage.cart)
   return (
     <div>
          <ol>
@@ -31,6 +31,12 @@ const CartPage = () => {
     )
   }
 
+  const mapStateToProps = state => {
+    return {
+      userId: state.user.id,
+      currentOrder: state.orders.currentOrder
+    }
+  }
 
+  export default connect(mapStateToProps)(CartPage)
 
-export default CartPage;
