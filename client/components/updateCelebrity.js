@@ -52,6 +52,7 @@ class UpdateCelebrity extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
+        <h3>Update Celebrtiy Information:</h3>
         <div>
           <label htmlFor="firstName">First Name:</label>
           <input

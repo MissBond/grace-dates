@@ -27,19 +27,15 @@ class AllCelebrities extends React.Component {
     return (netWorth * 100000 / minsPerYr).toFixed(2)
   }
 
-  addToCart(item) {
+  addToCart(item, quantity) {
     if (this.props.userId) {
       const addedItem = {
         orderId: this.state.cart.id,
         userId: this.props.userId,
         celebrityId: item.id,
-        quantity: 1
+        quantity: quantity
       }
-      this.props.addItem(
-        this.props.userId,
-        this.state.cart.id,
-        addedItem
-      )
+      this.props.addItem(this.props.userId, this.state.cart.id, addedItem)
     } else {
       let cart = this.state.cart
       cart.push(item)
@@ -83,7 +79,9 @@ class AllCelebrities extends React.Component {
           <div className="sort">
             <div className="collection-sort">
               <label>Filter By:</label>
-              <select onChange={event => this.props.changeView(event.target.value)}>
+              <select
+                onChange={event => this.props.changeView(event.target.value)}
+              >
                 <option value="All">All</option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
@@ -95,30 +93,32 @@ class AllCelebrities extends React.Component {
         <section className="products">
           {filteredCelebrities.map(celebrity => (
             <div key={celebrity.id} className="product-card">
-
               <div key={celebrity.id}>
                 <div className="product-info">
-                    <div className="product-image">
-                      <img src={celebrity.imageUrl} />
-                    </div>
-                    <h5>
-                      <Link to={`/celebrities/${celebrity.id}`}>{`${
-                      celebrity.firstName} ${celebrity.lastName}`}</Link>
-                    </h5>
-                    <h6>Occupation: {`${celebrity.occupation}`}</h6>
-                    <h6>Price Per Minute: ${this.calculatePricePerMin(
-                      celebrity.netWorthMillions)}</h6>
-                    <AddCart
-                      celebrity={celebrity}
-                      cart={this.state.cart}
-                      addToCart={this.addToCart}
-                    />
+                  <div className="product-image">
+                    <img src={celebrity.imageUrl} />
+                  </div>
+                  <h5>
+                    <Link to={`/celebrities/${celebrity.id}`}>{`${
+                      celebrity.firstName
+                    } ${celebrity.lastName}`}</Link>
+                  </h5>
+                  <h6>Occupation: {`${celebrity.occupation}`}</h6>
+                  <h6>
+                    Price Per Minute: ${this.calculatePricePerMin(
+                      celebrity.netWorthMillions
+                    )}
+                  </h6>
+                  <AddCart
+                    celebrity={celebrity}
+                    cart={this.state.cart}
+                    addToCart={this.addToCart}
+                    addType="Add"
+                  />
                 </div>
               </div>
-
             </div>
-           )
-          )}
+          ))}
         </section>
         {this.props.isAdmin && <AddCelebrityForm />}
       </div>
