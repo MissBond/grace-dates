@@ -1,14 +1,43 @@
 import React from 'react'
 
-const AddCart = (props) => {
+class AddCart extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      quantity: this.props.addType === 'Add' ? 1 : this.props.currentQuantity
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
+  
+  handleChange(event) {
+    this.setState({
+      quantity: event.target.value
+    })
+  }
+
+  render() {
     return (
-      <button
-        type="button"
-        onClick={() => props.addToCart(props.celebrity)}
+      <form
+        onSubmit={event => {
+          event.preventDefault()
+          this.props.addType === 'Add' ?
+          this.props.addToCart(this.props.celebrity, this.state.quantity, this.props.addType) :
+          this.props.updateQuantity(this.props.userId, this.props.orderId, this.state.quantity, this.props.celebrityId)
+        }}
       >
-        Add To Cart
-      </button>
+        {this.props.addType === 'Add' && 'Quantity: '}
+        <input
+          type="number"
+          name="quantity"
+          value={this.state.quantity}
+          min="1"
+          max="10"
+          onChange={this.handleChange}
+        />
+        <button type="submit">{this.props.addType}</button>
+      </form>
     )
+  }
 }
 
 export default AddCart

@@ -27,13 +27,13 @@ class AllCelebrities extends React.Component {
     return (netWorth * 100000 / minsPerYr).toFixed(2)
   }
 
-  addToCart(item) {
+  addToCart(item, quantity) {
     if (this.props.userId) {
       const addedItem = {
         orderId: this.state.cart.id,
         userId: this.props.userId,
         celebrityId: item.id,
-        quantity: 1
+        quantity: quantity
       }
       this.props.addItem(
         this.props.userId,
@@ -95,6 +95,7 @@ class AllCelebrities extends React.Component {
                   celebrity={celebrity}
                   cart={this.state.cart}
                   addToCart={this.addToCart}
+                  addType='Add'
                 />
                 <li key={celebrity.id}>
                   <Link to={`/celebrities/${celebrity.id}`}>{`${
