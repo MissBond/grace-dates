@@ -8,6 +8,11 @@ import {
   fetchWithoutDeletedItem
 } from '../store/orders'
 
+function calculatePricePerMin(netWorth) {
+  const minsPerYr = 525600
+  return (netWorth * 100000 / minsPerYr).toFixed(2)
+}
+
 const CartPage = props => {
   const cartItems = props.userId
     ? props.currentOrder.celebrities
@@ -28,6 +33,11 @@ const CartPage = props => {
               {celebrity.celebrityOrder
                 ? `${celebrity.celebrityOrder.quantity}`
                 : 'Fix for local storage'}
+              <br />
+              Subtotal: ${+(celebrity.celebrityOrder
+                ? `${celebrity.celebrityOrder.quantity}`
+                : 'Fix for local storage')* +calculatePricePerMin(
+                  celebrity.netWorthMillions)}
               <div>
                 <AddCart
                   addType="Update Quantity"
@@ -58,6 +68,14 @@ const CartPage = props => {
           </div>
         ))}
       </ol>
+      <div>
+        Total: ${cartItems.reduce((acc, celebrity) => {
+          return acc + (+(celebrity.celebrityOrder
+            ? `${celebrity.celebrityOrder.quantity}`
+            : 'Fix for local storage')*+calculatePricePerMin(
+              celebrity.netWorthMillions))
+        },0)}
+      </div>
       <Link to="/checkout">
         <button onClick={() => <CheckoutForm />} type="button">
           Checkout
