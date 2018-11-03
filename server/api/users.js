@@ -118,12 +118,12 @@ router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
   try {
     const orderId = req.body.orderId
     const celebrityId = req.body.celebrityId
+    const addQuantity = +req.body.quantity
     const lineItem = await CelebrityOrder.find({
       where: {orderId, celebrityId}
     })
-    console.log(lineItem)
     if (lineItem) {
-      const newQuantity = lineItem.quantity + 1
+      const newQuantity = lineItem.quantity + addQuantity
       await lineItem.update({quantity: newQuantity})
     } else {
       await CelebrityOrder.create(req.body)
@@ -137,25 +137,38 @@ router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
   }
 })
 
+//update a quantity once an item is in the cart
+
+router.put('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
+  try {
+    const orderId = req.params.orderId
+    const celebrityId = req.body.celebrityId
+    console.log(req.params.orderId)
+    console.log(req.body)
+    const lineItem = await CelebrityOrder.find({
+      where: {orderId, celebrityId}
+    })
+    await lineItem.update(req.body.updates)
+    const updatedOrder = await Order.findById(orderId, {
+      include: [{model: Celebrity}]
+    })
+    res.json(updatedOrder)
+  } catch (error) {
+    next(error)
+  }
+})
+
 //to delete an item to a cart and send the revised cart back
 
 router.delete(
-  '/:userId/orders/:orderId/celebrities',
+  '/:userId/orders/:orderId/celebrities/:celebrityId',
   async (req, res, next) => {
     try {
-      const orderId = req.body.orderId
-      const celebrityId = req.body.celebrityId
-      const lineItem = await CelebrityOrder.find({
-        where: {orderId, celebrityId}
+      const orderId = +req.params.orderId
+      const celebrityId = +req.params.celebrityId
+      await CelebrityOrder.destroy({
+        where: {celebrityId, orderId}
       })
-      if (lineItem.quantity === 1) {
-        await CelebrityOrder.destroy({
-          where: {celebrityId, orderId}
-        })
-      } else {
-        const newQuantity = lineItem.quantity - 1
-        await lineItem.update({quantity: newQuantity})
-      }
       const updatedOrder = await Order.findById(orderId, {
         include: [{model: Celebrity}]
       })
