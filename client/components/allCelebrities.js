@@ -25,8 +25,13 @@ class AllCelebrities extends React.Component {
 
   updateFilter = event => {
     this.setState({
-      filterValue: event.currentTarget.value,
-      filterGender: 'all'
+      filterValue: event.currentTarget.value
+    })
+  }
+
+  updateGenderFilter = event => {
+    this.setState({
+      filterGender: event.currentTarget.value
     })
   }
 
@@ -74,17 +79,26 @@ class AllCelebrities extends React.Component {
   }
 
   getFilteredCelebrites() {
-    const {filterValue} = this.state
-    const {celebrities, visibilityFilter} = this.props.celebrities
+    const {filterValue, filterGender} = this.state
+    const {celebrities} = this.props.celebrities
 
-    if (filterValue.length === 0) return celebrities
-
+    // Create a regular expression to match the user's filter value
+    // the 'i' flag makes this pattern case insensitive
     const pattern = new RegExp(filterValue, 'i')
 
+    // Filter all celebrities that do not match our criteria.
     return celebrities.filter(celebrity => {
-      if (!pattern.test(celebrity.firstName)) return false
-      // if gender isn't all and celeb.gender !==... return false
+      // Is the user looking for a particular gender?
+      if (filterGender !== 'all') {
+        // Reject any celebrity who's gender does not match.
+        if (celebrity.gender !== filterGender) return false
+      }
 
+      // Is the user looking for a particular name?
+      if (filterValue.length > 0) {
+        // Reject any celebrity who's name does not match our pattern
+        if (!pattern.test(celebrity.firstName)) return false
+      }
       return true
     })
   }
@@ -141,8 +155,11 @@ class AllCelebrities extends React.Component {
           </form>
         </div>
         <div>
-          <select onChange={event => this.props.changeView(event.target.value)}>
-            <option value="All">All</option>
+          <select
+            value={this.state.filterGender}
+            onChange={this.updateGenderFilter}
+          >
+            <option value="all">All</option>
             <option value="Female">Female</option>
             <option value="Male">Male</option>
           </select>
