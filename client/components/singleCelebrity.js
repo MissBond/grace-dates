@@ -2,7 +2,10 @@ import React from 'react'
 import {connect} from 'react-redux'
 import UpdateCelebrity from './updateCelebrity'
 import {fetchCelebrity, removeSelectedCelebrity} from '../store'
+import Reviews from './reviews'
 import AddCart from './addCart'
+import {runInThisContext} from 'vm'
+import {fetchAddedItem} from '../store/orders'
 
 class SingleCelebrity extends React.Component {
   constructor() {
@@ -11,6 +14,7 @@ class SingleCelebrity extends React.Component {
       cart: []
     }
     this.populateLocalStorage = this.populateLocalStorage.bind(this)
+    this.addToCart = this.addToCart.bind(this)
   }
 
   componentDidMount() {
@@ -20,25 +24,41 @@ class SingleCelebrity extends React.Component {
   }
 
   populateLocalStorage() {
-    for (let key in this.state) {
-      if (localStorage.hasOwnProperty(key)) {
-        let value = localStorage.getItem(key)
-        try {
-          value = JSON.parse(value)
-          this.setState({[key]: value})
-        } catch (e) {
-          this.setState({[key]: value})
+    if (this.props.userId) {
+      this.setState({
+        cart: this.props.currentOrder
+      })
+    } else {
+      for (let key in this.state) {
+        if (localStorage.hasOwnProperty(key)) {
+          let value = localStorage.getItem(key)
+          try {
+            value = JSON.parse(value)
+            this.setState({[key]: value})
+          } catch (e) {
+            this.setState({[key]: value})
+          }
         }
       }
     }
   }
 
-  addToCart(item) {
-    let cart = this.state.cart
-    cart.push(item)
-    localStorage.setItem('cart', JSON.stringify(cart))
-    this.setState(cart)
-    console.log(this.state.cart)
+  addToCart(item, quantity) {
+    if (this.props.userId) {
+      console.log(this.state.cart.id)
+      const addedItem = {
+        orderId: this.state.cart.id,
+        userId: this.props.userId,
+        celebrityId: item.id,
+        quantity: quantity
+      }
+      this.props.addItem(this.props.userId, this.state.cart.id, addedItem)
+    } else {
+      let cart = this.state.cart
+      cart.push(item)
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.setState(cart)
+    }
   }
 
   render() {
@@ -55,19 +75,25 @@ class SingleCelebrity extends React.Component {
         <div>{celebrity.gender}</div>
         <div>{celebrity.netWorthMillions}</div>
         <p>{celebrity.description}</p>
-        {this.props.isAdmin && <UpdateCelebrity />}
         <AddCart
           celebrity={celebrity}
           cart={this.state.cart}
           addToCart={this.addToCart}
+          addType="Add"
         />
-        <button
-          onClick={() => this.props.deleted(celebrity.id)}
-          type="button"
-          className="delete"
-        >
-          Delete
-        </button>
+        <Reviews />
+        {this.props.isAdmin && (
+          <div>
+            <UpdateCelebrity />
+            <button
+              onClick={() => this.props.deleted(celebrity.id)}
+              type="button"
+              className="delete"
+            >
+              Delete Celebrity
+            </button>
+          </div>
+        )}
       </div>
     ) : (
       <p>no celeb</p>
@@ -78,14 +104,18 @@ class SingleCelebrity extends React.Component {
 const mapStateToProps = state => {
   return {
     celebrity: state.oneCelebrity,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    userId: state.user.id,
+    currentOrder: state.orders.currentOrder
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     fetch: celebrityId => dispatch(fetchCelebrity(celebrityId)),
-    deleted: celebrity => dispatch(removeSelectedCelebrity(celebrity))
+    deleted: celebrity => dispatch(removeSelectedCelebrity(celebrity)),
+    addItem: (userId, orderId, item) =>
+      dispatch(fetchAddedItem(userId, orderId, item))
   }
 }
 
