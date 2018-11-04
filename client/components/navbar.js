@@ -4,6 +4,9 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout, clearOrders} from '../store'
 import ShoppingCart from './shoppingCart'
+//import {mainLogo} from './graceDatesLogo.png';
+//const mainLogo = require('../../public/images/graceDatesLogo.png');
+
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
@@ -11,14 +14,15 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     <nav>
 
       {isLoggedIn ? (
-        <div>
+        <div className="navbar">
           {/* The navbar will show these links after you log in */}
-          <div id="nav-bar-left">
-            <Link to="/home">Grace Dates</Link>
+          <div className="nav-bar-items">
+            {/* <Link to="/home"><img className="logo-img" src={mainLogo}/></Link> */}
+            <Link to="/home">GraceDates</Link>
             <Link to="/home">Home</Link>
             <Link to='/celebrities'>All Celebrities</Link>
           </div>
-          <div id="nav-bar-right">
+          <div className="nav-bar-items nav-bar-right">
             <Link to='/cart'>Cart</Link>
             <a href="#" onClick={handleClick}>Logout</a>
           </div>
@@ -26,12 +30,12 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-          <div id="nav-bar-left">
+          <div id="nav-bar-items">
             <Link to="/home"><h1>Grace Dates</h1></Link>
             <Link to="/home">Home</Link>
             <Link to='/celebrities'>All Celebrities</Link>
           </div>
-          <div id="nav-bar-right">
+          <div id="nav-bar-items nav-bar-right">
             <Link to="/login">Login</Link>
             <Link to="/signup">Sign Up</Link>
             <Link to='/cart'>Cart</Link>

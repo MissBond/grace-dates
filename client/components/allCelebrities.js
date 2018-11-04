@@ -82,8 +82,8 @@ class AllCelebrities extends React.Component {
           <h1>Choose Your Date!</h1>
           <div className="sort">
             <div className="collection-sort">
-              <label>Filter By:</label>
-              <select onChange={event => this.props.changeView(event.target.value)}>
+              <label id="filter-by-label">Filter By:</label>
+              <select id="custom-select" onChange={event => this.props.changeView(event.target.value)}>
                 <option value="All">All</option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
