@@ -1,7 +1,8 @@
 import React from 'react'
+// import CheckoutForm from './checkoutForm';
+import AppStripe from './app-stripe';
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import CheckoutForm from './checkoutForm'
 import AddCart from './addCart'
 import {
   fetchWithUpdatedQuantity,
@@ -76,11 +77,9 @@ const CartPage = props => {
               celebrity.netWorthMillions))
         },0)}
       </div>
-      <Link to="/checkout">
-        <button onClick={() => <CheckoutForm />} type="button">
-          Checkout
-        </button>
-      </Link>
+     <Link to='/checkout'>
+            <button onClick={() => <AppStripe />} type="button">Checkout</button>
+          </Link>
     </div>
   )
 }
