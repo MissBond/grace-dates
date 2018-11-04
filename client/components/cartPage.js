@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link, Redirect} from 'react-router-dom'
-import CheckoutForm from './checkoutForm';
+// import CheckoutForm from './checkoutForm';
+import AppStripe from './app-stripe';
 
 const CartPage = () => {
   const cartItems = JSON.parse(localStorage.cart)
@@ -25,7 +26,7 @@ const CartPage = () => {
             ))}
           </ol>
           <Link to='/checkout'>
-            <button onClick={() => <CheckoutForm />} type="button">Checkout</button>
+            <button onClick={() => <AppStripe />} type="button">Checkout</button>
           </Link>
     </div>
     )

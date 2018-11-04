@@ -10,4 +10,5 @@ export {Signup} from './signup-form'
 export {default as AllCelebrities} from './allCelebrities'
 export {default as SingleCelebrity} from './singleCelebrity'
 export {default as CartPage} from './cartPage'
-export {default as CheckoutForm} from './checkoutForm'
+export {default as AppStripe} from './app-stripe'
+
