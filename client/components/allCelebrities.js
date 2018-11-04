@@ -10,6 +10,8 @@ class AllCelebrities extends React.Component {
   constructor() {
     super()
     this.state = {
+      filterValue: '',
+      filterGender: 'all',
       cart: []
     }
     this.populateLocalStorage = this.populateLocalStorage.bind(this)
@@ -19,6 +21,13 @@ class AllCelebrities extends React.Component {
   componentDidMount() {
     this.props.loadCelebrities()
     this.populateLocalStorage()
+  }
+
+  updateFilter = event => {
+    this.setState({
+      filterValue: event.currentTarget.value,
+      filterGender: 'all'
+    })
   }
 
   calculatePricePerMin(netWorth) {
@@ -64,62 +73,83 @@ class AllCelebrities extends React.Component {
     }
   }
 
-  render() {
+  getFilteredCelebrites() {
+    const {filterValue} = this.state
     const {celebrities, visibilityFilter} = this.props.celebrities
-    const filteredCelebrities =
-      visibilityFilter === 'All'
-        ? celebrities
-        : visibilityFilter === 'Female'
-          ? celebrities.filter(celebrity => celebrity.gender === 'Female')
-          : celebrities.filter(celebrity => celebrity.gender === 'Male')
+
+    if (filterValue.length === 0) return celebrities
+
+    const pattern = new RegExp(filterValue, 'i')
+
+    return celebrities.filter(celebrity => {
+      if (!pattern.test(celebrity.firstName)) return false
+      // if gender isn't all and celeb.gender !==... return false
+
+      return true
+    })
+  }
+
+  renderCelebrites() {
+    const filteredCelebrites = this.getFilteredCelebrites()
+
+    return filteredCelebrites.map(celebrity => (
+      <div key={celebrity.id}>
+        <div className="product-info">
+          <div className="product-image">
+            <img src={celebrity.imageUrl} />
+          </div>
+          <h5>
+            <Link to={`/celebrities/${celebrity.id}`}>{`${
+              celebrity.firstName
+            } ${celebrity.lastName}`}</Link>
+          </h5>
+          <h6>Occupation: {`${celebrity.occupation}`}</h6>
+          <h6>
+            Price Per Minute: ${this.calculatePricePerMin(
+              celebrity.netWorthMillions
+            )}
+          </h6>
+          <AddCart
+            celebrity={celebrity}
+            cart={this.state.cart}
+            addToCart={this.addToCart}
+            addType="Add"
+          />
+        </div>
+      </div>
+    ))
+  }
+
+  render() {
+    // const {celebrities, visibilityFilter} = this.props.celebrities
+    // const filteredCelebrities =
+    //   visibilityFilter === 'All'
+    //     ? celebrities
+    //     : visibilityFilter === 'Female'
+    //       ? celebrities.filter(celebrity => celebrity.gender === 'Female')
+    //       : celebrities.filter(celebrity => celebrity.gender === 'Male')
     return (
       <div>
-        <nav className="product-filter">
-          <h1>Choose Your Date!</h1>
-          <div className="sort">
-            <div className="collection-sort">
-              <label>Filter By:</label>
-              <select
-                onChange={event => this.props.changeView(event.target.value)}
-              >
-                <option value="All">All</option>
-                <option value="Female">Female</option>
-                <option value="Male">Male</option>
-              </select>
-            </div>
-          </div>
-        </nav>
-
-        <section className="products">
-          {filteredCelebrities.map(celebrity => (
-            <div key={celebrity.id} className="product-card">
-              <div key={celebrity.id}>
-                <div className="product-info">
-                  <div className="product-image">
-                    <img src={celebrity.imageUrl} />
-                  </div>
-                  <h5>
-                    <Link to={`/celebrities/${celebrity.id}`}>{`${
-                      celebrity.firstName
-                    } ${celebrity.lastName}`}</Link>
-                  </h5>
-                  <h6>Occupation: {`${celebrity.occupation}`}</h6>
-                  <h6>
-                    Price Per Minute: ${this.calculatePricePerMin(
-                      celebrity.netWorthMillions
-                    )}
-                  </h6>
-                  <AddCart
-                    celebrity={celebrity}
-                    cart={this.state.cart}
-                    addToCart={this.addToCart}
-                    addType="Add"
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </section>
+        <h1>Choose Your Date!</h1>
+        <div>
+          <form>
+            <input
+              type="text"
+              placeholder="Search..."
+              onChange={this.updateFilter}
+            />
+          </form>
+        </div>
+        <div>
+          <select onChange={event => this.props.changeView(event.target.value)}>
+            <option value="All">All</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+          </select>
+        </div>
+        <div>
+          <ul>{this.renderCelebrites()}</ul>
+        </div>
         {this.props.isAdmin && <AddCelebrityForm />}
       </div>
     )
