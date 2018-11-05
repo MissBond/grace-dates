@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Elements, StripeProvider} from 'react-stripe-elements';
-import CheckoutForm from './CheckoutForm';
+import CheckoutForm from './checkoutForm';
 
 class AppStripe extends Component {
   render() {
