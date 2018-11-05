@@ -12,7 +12,8 @@ class AllCelebrities extends React.Component {
     this.state = {
       filterValue: '',
       filterGender: 'all',
-      cart: []
+      cart: [],
+      quantities: {}
     }
     this.populateLocalStorage = this.populateLocalStorage.bind(this)
     this.addToCart = this.addToCart.bind(this)
@@ -34,6 +35,12 @@ class AllCelebrities extends React.Component {
       filterGender: event.currentTarget.value
     })
   }
+  
+  componentDidUpdate(prevState) {
+    if (prevState.quantities !== this.state.quanities) {
+      this.populateLocalStorage()
+    }
+  }
 
   calculatePricePerMin(netWorth) {
     const minsPerYr = 525600
@@ -51,10 +58,22 @@ class AllCelebrities extends React.Component {
       }
       this.props.addItem(this.props.userId, this.state.cart.id, addedItem)
     } else {
-      let cart = this.state.cart
-      cart.push(item)
+      let { cart, quantities } = this.state
+      let subCart = cart.filter(elem => elem.id === item.id)
+      if (subCart.length){
+        if (quantities[item.id]) {
+          quantities[item.id] = Number(quantities[item.id]) + Number(quantity)
+        } else {
+          quantities[item.id] = quantity
+        }
+      } else {
+        cart.push(item)
+        quantities[item.id] = quantity
+      }
+      localStorage.setItem('quantities', JSON.stringify(quantities))
       localStorage.setItem('cart', JSON.stringify(cart))
-      this.setState(cart)
+
+      this.setState({cart, quantities})
     }
   }
 
@@ -177,7 +196,6 @@ const mapStateToProps = state => {
   return {
     celebrities: state.celebrities,
     isAdmin: state.user.isAdmin,
-    // cart: state.cart,
     userId: state.user.id,
     currentOrder: state.orders.currentOrder
   }

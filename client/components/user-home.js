@@ -21,7 +21,6 @@ class UserHome extends React.Component {
     const orderHistory = this.props.orders.filter(
       order => order.status === 'Completed'
     )
-    console.log('cart in render', cart)
     return (
       <div>
         <div>
