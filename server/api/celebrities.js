@@ -45,6 +45,7 @@ router.put('/:celebrityId', async (req, res, next) => {
       res.status(404).send()
     } else {
       const updatedCelebrity = await celebrityToUpdate.update(updates)
+
       res.json(updatedCelebrity)
     }
   } catch (err) {

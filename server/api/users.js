@@ -32,7 +32,6 @@ router.get('/:userId', async (req, res, next) => {
         attributes: ['id', 'email', 'firstName', 'lastName'],
         include: [Order]
       })
-      console.log('updatedUser in route', updatedUser)
       res.json(updatedUser)
     }
   } catch (err) {
@@ -143,8 +142,6 @@ router.put('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
   try {
     const orderId = req.params.orderId
     const celebrityId = req.body.celebrityId
-    console.log(req.params.orderId)
-    console.log(req.body)
     const lineItem = await CelebrityOrder.find({
       where: {orderId, celebrityId}
     })
