@@ -5,6 +5,10 @@ const CelebrityOrder = db.define('celebrityOrder', {
   quantity: {
     type: Sequelize.INTEGER,
     defaultValue: 0
+  },
+  totalPurchasePrice: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   }
 })
 

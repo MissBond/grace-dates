@@ -52,7 +52,6 @@ class AllCelebrities extends React.Component {
     if (this.props.userId) {
       const addedItem = {
         orderId: this.state.cart.id,
-        userId: this.props.userId,
         celebrityId: item.id,
         quantity: quantity
       }
@@ -126,7 +125,7 @@ class AllCelebrities extends React.Component {
     const filteredCelebrites = this.getFilteredCelebrites()
 
     return filteredCelebrites.map(celebrity => (
-      <div key={celebrity.id}>
+      <div key={celebrity.id} className="product-card">
         <div className="product-info">
           <div className="product-image">
             <img src={celebrity.imageUrl} />
@@ -163,34 +162,30 @@ class AllCelebrities extends React.Component {
     //       : celebrities.filter(celebrity => celebrity.gender === 'Male')
     return (
       <div>
-        <h1>Choose Your Date!</h1>
-        <div>
-          <form>
+        <nav className="product-filter">
+          <h1>Choose Your Date!</h1>
             <input
-              type="text"
-              placeholder="Search..."
-              onChange={this.updateFilter}
-            />
-          </form>
-        </div>
-        <div>
-          <select
-            value={this.state.filterGender}
-            onChange={this.updateGenderFilter}
-          >
-            <option value="all">All</option>
-            <option value="Female">Female</option>
-            <option value="Male">Male</option>
-          </select>
-        </div>
-        <div>
-          <ul>{this.renderCelebrites()}</ul>
-        </div>
+                  type="text"
+                  placeholder="Search..."
+                  onChange={this.updateFilter}
+                />
+            <div className="collection-sort">
+               <div className="collection-sort">
+                <label>Filter By:</label>
+                  <select value={this.state.filterGender} onChange={this.updateGenderFilter}>
+                    <option value="all">All</option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                  </select>
+               </div>
+            </div>
+        </nav>
+        <section className="products">{this.renderCelebrites()}</section>
         {this.props.isAdmin && <AddCelebrityForm />}
       </div>
     )
+ }
   }
-}
 
 const mapStateToProps = state => {
   return {

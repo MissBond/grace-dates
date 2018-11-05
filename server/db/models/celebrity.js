@@ -44,6 +44,10 @@ const Celebrity = db.define('celebrity', {
     validate: {
       notEmpty: true
     }
+  },
+  isAvailable: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   }
 })
 
