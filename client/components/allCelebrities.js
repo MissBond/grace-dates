@@ -115,11 +115,7 @@ class AllCelebrities extends React.Component {
       // Is the user looking for a particular name?
       if (filterValue.length > 0) {
         // Reject any celebrity who's name does not match our pattern
-        if (
-          !pattern.test(celebrity.firstName) ||
-          !pattern.test(celebrity.lastName)
-        )
-          return false
+        if (!pattern.test(celebrity.firstName)) return false
       }
       return true
     })
