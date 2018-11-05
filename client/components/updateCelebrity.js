@@ -12,7 +12,8 @@ class UpdateCelebrity extends Component {
       occupation: '',
       gender: '',
       netWorthMillions: '',
-      description: ''
+      description: '',
+      isAvailable: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -27,7 +28,8 @@ class UpdateCelebrity extends Component {
         occupation: this.props.selectedCelebrity.occupation,
         gender: this.props.selectedCelebrity.gender,
         netWorthMillions: this.props.selectedCelebrity.netWorthMillions,
-        description: this.props.selectedCelebrity.description
+        description: this.props.selectedCelebrity.description,
+        isAvailable: this.props.selectedCelebrity.isAvailable
       })
     }
   }
@@ -43,15 +45,21 @@ class UpdateCelebrity extends Component {
       this.setState({
         [event.target.name]: event.target.value
       })
+    } else if (event.target.type === 'checkbox') {
+      this.setState({
+        [event.target.name]: !this.state.isAvailable
+      })
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value
+      })
     }
-    this.setState({
-      [event.target.name]: event.target.value
-    })
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
+        <h3>Update Celebrtiy Information:</h3>
         <div>
           <label htmlFor="firstName">First Name:</label>
           <input
@@ -132,8 +140,16 @@ class UpdateCelebrity extends Component {
           />
         </div>
         <div>
-          <button type="submit">Submit</button>
+          <label htmlFor="isAvailable">Available for Dates?</label>
+          <input
+            onChange={this.handleChange}
+            type="checkbox"
+            name="isAvailable"
+            value={this.state.isAvailable}
+            checked={this.state.isAvailable}
+          />
         </div>
+        <button type="submit">Submit</button>
       </form>
     )
   }
@@ -150,7 +166,8 @@ const mapStateToProps = state => {
       occupation: oneCelebrity.occupation,
       gender: oneCelebrity.gender,
       netWorthMillions: oneCelebrity.netWorthMillions,
-      description: oneCelebrity.description
+      description: oneCelebrity.description,
+      isAvailable: oneCelebrity.isAvailable
     },
     selectedCelebrityId: oneCelebrity.id
   }

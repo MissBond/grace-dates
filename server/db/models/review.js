@@ -11,7 +11,6 @@ const Review = db.define('review', {
   },
   rating: {
     type: Sequelize.FLOAT,
-    allowNull: false,
     validate: {
       min: 0.0,
       max: 5.0

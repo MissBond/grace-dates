@@ -19,6 +19,7 @@ class UpdateUserForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
+    console.log('update user event',event)
     this.props.updateUser(this.props.user.id, this.state)
     this.setState({
       password: ''

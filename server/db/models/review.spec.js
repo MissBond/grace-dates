@@ -28,22 +28,22 @@ describe('Review model', () => {
       }
     })
 
-    it('requires rating', async () => {
-      const review = Review.build({
-        header: 'Hiking with Heidi Klum',
-        date: 2018 - 10 - 31,
-        description: 'this was really fun'
-      })
+    // it('requires rating', async () => {
+    //   const review = Review.build({
+    //     header: 'Hiking with Heidi Klum',
+    //     date: 2018 - 10 - 31,
+    //     description: 'this was really fun'
+    //   })
 
-      try {
-        await review.validate()
-        throw Error(
-          'validation was successful but should have failed with null rating'
-        )
-      } catch (err) {
-        expect(err.message).to.contain('rating cannot be null')
-      }
-    })
+    //   try {
+    //     await review.validate()
+    //     throw Error(
+    //       'validation was successful but should have failed with null rating'
+    //     )
+    //   } catch (err) {
+    //     expect(err.message).to.contain('rating cannot be null')
+    //   }
+    // })
 
     it('requires date', async () => {
       const review = Review.build({
