@@ -1,6 +1,6 @@
 import React from 'react'
 // import CheckoutForm from './checkoutForm';
-import AppStripe from './app-stripe';
+import AppStripe from './app-stripe'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import AddCart from './addCart'
@@ -42,7 +42,8 @@ class CartPage extends React.Component {
       localStorage.setItem('quantities', JSON.stringify(newQuantities))
       this.setState({
         cart: newCart,
-        quantities: newQuantities})
+        quantities: newQuantities
+      })
     }
   }
 
@@ -74,7 +75,6 @@ class CartPage extends React.Component {
   //   }
   // }
 
-
   handleUpdateClick(celebrityId, newQuantity) {
     let currentQuantities = {...this.state.quantities}
     currentQuantities[celebrityId] = newQuantity
@@ -89,90 +89,85 @@ class CartPage extends React.Component {
     // this.setState({
     //   cart: this.props.currentOrder.celebrities
     // })
-
   }
 
   render() {
     let {cart, quantities} = this.state
-    return (
-      cart.length ?
-        (<div>
-          <ol>
-            {cart.map(
-              (celebrity, i) =>
-                // !this.props.userId ?
-                // quantities[celebrity.id] && (
-                  (
-                  <div key={i}>
-                    <li key={celebrity.id}>
-                      <Link to={`/celebrities/${celebrity.id}`}>{`${
-                        celebrity.firstName
-                      } ${celebrity.lastName}`}</Link>
-                      <br />
-                      Occupation: {`${celebrity.occupation}`}
-                      <br />
-                      Quantity:{' '}
-                      {celebrity.celebrityOrder
-                        ? `${celebrity.celebrityOrder.quantity}`
-                        : quantities[celebrity.id]}
-                      <br />
-                      Subtotal: ${+(celebrity.celebrityOrder
-                        ? `${celebrity.celebrityOrder.quantity}`
-                        : +quantities[celebrity.id]) *
-                        +this.calculatePricePerMin(celebrity.netWorthMillions)}
-                      <div>
-                        <AddCart
-                          quantities={quantities[celebrity.id]}
-                          userId={this.props.userId}
-                          addType="Update Quantity"
-                          // updateQuantity={this.props.updateQuantity}
-                          celebrityId={celebrity.id}
-                          orderId={this.props.currentOrder.id}
-                          currentQuantity={
-                            this.props.userId
-                              ? celebrity.celebrityOrder.quantity
-                              : 1
-                          }
-                          handleUpdateClick={this.handleUpdateClick}
-                          handleUpdateClickThunk={this.handleUpdateClickThunk}
-                        />
-                      </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            this.handleClick(celebrity)
-                          }}
-                        >
-                          Delete from Cart
-                        </button>
-                      </div>
-                      <br />
-                      <img src={celebrity.imageUrl} />
-                    </li>
-                    <br />
-                  </div>
-                )
-            )}
-          </ol>
-          <div>
-            Total: ${cart.reduce((acc, celebrity) => {
-              return (
-                acc +
-                +(celebrity.celebrityOrder
+    return cart.length ? (
+      <div>
+        <ol>
+          {cart.map((celebrity, i) => (
+            // !this.props.userId ?
+            // quantities[celebrity.id] && (
+            <div key={i}>
+              <li key={celebrity.id}>
+                <Link to={`/celebrities/${celebrity.id}`}>{`${
+                  celebrity.firstName
+                } ${celebrity.lastName}`}</Link>
+                <br />
+                Occupation: {`${celebrity.occupation}`}
+                <br />
+                Quantity:{' '}
+                {celebrity.celebrityOrder
                   ? `${celebrity.celebrityOrder.quantity}`
-                  : quantities[celebrity.id]) *
-                  +this.calculatePricePerMin(celebrity.netWorthMillions)
-              )
-            }, 0)}
-          </div>
-      <Link to='/checkout'>
-            <button onClick={() => <AppStripe />} type="button">Checkout</button>
-          </Link>
+                  : quantities[celebrity.id]}
+                <br />
+                Subtotal: ${+(celebrity.celebrityOrder
+                  ? `${celebrity.celebrityOrder.quantity}`
+                  : +quantities[celebrity.id]) *
+                  +this.calculatePricePerMin(celebrity.netWorthMillions)}
+                <div>
+                  <AddCart
+                    quantities={quantities[celebrity.id]}
+                    userId={this.props.userId}
+                    addType="Update Quantity"
+                    // updateQuantity={this.props.updateQuantity}
+                    celebrityId={celebrity.id}
+                    orderId={this.props.currentOrder.id}
+                    currentQuantity={
+                      this.props.userId ? celebrity.celebrityOrder.quantity : 1
+                    }
+                    handleUpdateClick={this.handleUpdateClick}
+                    handleUpdateClickThunk={this.handleUpdateClickThunk}
+                  />
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      this.handleClick(celebrity)
+                    }}
+                  >
+                    Delete from Cart
+                  </button>
+                </div>
+                <br />
+                <img src={celebrity.imageUrl} />
+              </li>
+              <br />
+            </div>
+          ))}
+        </ol>
+        <div>
+          Total: ${cart.reduce((acc, celebrity) => {
+            return (
+              acc +
+              +(celebrity.celebrityOrder
+                ? `${celebrity.celebrityOrder.quantity}`
+                : quantities[celebrity.id]) *
+                +this.calculatePricePerMin(celebrity.netWorthMillions)
+            )
+          }, 0)}
         </div>
-      )
-      : null
-    )
+        <Link to="/checkout">
+          <button onClick={() => <AppStripe />} type="button">
+            Checkout
+          </button>
+        </Link>
+      </div>
+    ) : <div>
+      <h3>It looks like your cart is empty!</h3>
+    </div>
   }
 }
 

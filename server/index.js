@@ -111,6 +111,7 @@ app.post("/charge", async (req, res) => {
 
     res.json({status});
   } catch (err) {
+    console.log(err)
     res.status(500).end();
   }
 });

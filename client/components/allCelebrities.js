@@ -52,7 +52,6 @@ class AllCelebrities extends React.Component {
     if (this.props.userId) {
       const addedItem = {
         orderId: this.state.cart.id,
-        userId: this.props.userId,
         celebrityId: item.id,
         quantity: quantity
       }

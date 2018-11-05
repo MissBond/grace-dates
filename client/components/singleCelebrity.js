@@ -75,7 +75,7 @@ class SingleCelebrity extends React.Component {
   render() {
     const {oneCelebrity} = this.props.celebrity
     const celebrity = oneCelebrity
-
+    console.log(this.props.isAdmin)
     return celebrity ? (
       <div id="celebrity-single-view-container">
         <h1>
