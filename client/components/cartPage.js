@@ -1,6 +1,6 @@
 import React from 'react'
 // import CheckoutForm from './checkoutForm';
-import AppStripe from './app-stripe';
+import AppStripe from './app-stripe'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import AddCart from './addCart'
@@ -20,66 +20,77 @@ const CartPage = props => {
     : JSON.parse(localStorage.cart)
   return (
     <div>
-      <ol>
-        {cartItems.map((celebrity, i) => (
-          <div key={i}>
-            <li key={celebrity.id}>
-              <Link to={`/celebrities/${celebrity.id}`}>{`${
-                celebrity.firstName
-              } ${celebrity.lastName}`}</Link>
+      {cartItems.length ? (
+        <ol>
+          {cartItems.map((celebrity, i) => (
+            <div key={i}>
+              <li key={celebrity.id}>
+                <Link to={`/celebrities/${celebrity.id}`}>{`${
+                  celebrity.firstName
+                } ${celebrity.lastName}`}</Link>
+                <br />
+                Occupation: {`${celebrity.occupation}`}
+                <br />
+                Quantity:{' '}
+                {celebrity.celebrityOrder
+                  ? `${celebrity.celebrityOrder.quantity}`
+                  : 'Fix for local storage'}
+                <br />
+                Subtotal: ${+(celebrity.celebrityOrder
+                  ? `${celebrity.celebrityOrder.quantity}`
+                  : 'Fix for local storage') *
+                  +calculatePricePerMin(celebrity.netWorthMillions)}
+                <div>
+                  <AddCart
+                    addType="Update Quantity"
+                    updateQuantity={props.updateQuantity}
+                    celebrityId={celebrity.id}
+                    orderId={props.currentOrder.id}
+                    currentQuantity={celebrity.celebrityOrder.quantity}
+                  />
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      props.deleteItem(
+                        props.userId,
+                        props.currentOrder.id,
+                        celebrity.id
+                      )
+                    }}
+                  >
+                    Delete from Cart
+                  </button>
+                </div>
+                <br />
+                <img src={celebrity.imageUrl} />
+              </li>
               <br />
-              Occupation: {`${celebrity.occupation}`}
-              <br />
-              Quantity:{' '}
-              {celebrity.celebrityOrder
-                ? `${celebrity.celebrityOrder.quantity}`
-                : 'Fix for local storage'}
-              <br />
-              Subtotal: ${+(celebrity.celebrityOrder
-                ? `${celebrity.celebrityOrder.quantity}`
-                : 'Fix for local storage')* +calculatePricePerMin(
-                  celebrity.netWorthMillions)}
-              <div>
-                <AddCart
-                  addType="Update Quantity"
-                  updateQuantity={props.updateQuantity}
-                  celebrityId={celebrity.id}
-                  orderId={props.currentOrder.id}
-                  currentQuantity={celebrity.celebrityOrder.quantity}
-                />
-              </div>
-              <div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    props.deleteItem(
-                      props.userId,
-                      props.currentOrder.id,
-                      celebrity.id
-                    )
-                  }}
-                >
-                  Delete from Cart
-                </button>
-              </div>
-              <br />
-              <img src={celebrity.imageUrl} />
-            </li>
-            <br />
-          </div>
-        ))}
-      </ol>
+            </div>
+          ))}
+        </ol>
+      ) : (
+        <div>
+          <h3>It looks like your cart is empty!</h3>
+        </div>
+      )}
       <div>
         Total: ${cartItems.reduce((acc, celebrity) => {
-          return acc + (+(celebrity.celebrityOrder
-            ? `${celebrity.celebrityOrder.quantity}`
-            : 'Fix for local storage')*+calculatePricePerMin(
-              celebrity.netWorthMillions))
-        },0)}
+          return (
+            acc +
+            +(celebrity.celebrityOrder
+              ? `${celebrity.celebrityOrder.quantity}`
+              : 'Fix for local storage') *
+              +calculatePricePerMin(celebrity.netWorthMillions)
+          )
+        }, 0)}
       </div>
-     <Link to='/checkout'>
-            <button onClick={() => <AppStripe />} type="button">Checkout</button>
-          </Link>
+      <Link to="/checkout">
+        <button onClick={() => <AppStripe />} type="button">
+          Checkout
+        </button>
+      </Link>
     </div>
   )
 }

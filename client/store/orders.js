@@ -47,6 +47,7 @@ const ADD_ITEM = 'ADD_ITEM'
 const DELETE_ITEM = 'DELETE_ITEM'
 const UPDATE_QUANTITY = 'UPDATE_QUANTITY'
 const CHECKOUT_CURRENT_ORDER = 'CHECKOUT_CURRENT_ORDER'
+const CANCEL_ORDER = 'CANCEL_ORDER'
 const CLEAR_ORDERS = 'CLEAR_ORDERS'
 
 export const getAllOrders = orders => ({type: GET_ALL_ORDERS, orders})
@@ -57,6 +58,7 @@ export const checkoutCurrentOrder = order => ({
   type: CHECKOUT_CURRENT_ORDER,
   order
 })
+export const cancelOrder = order => ({type: CANCEL_ORDER, order})
 export const clearOrders = () => ({type: CLEAR_ORDERS})
 
 export const fetchAllOrders = userId => async dispatch => {
@@ -127,6 +129,14 @@ export const postCompletedOrder = (user, orderId) => {
     dispatch(checkoutCurrentOrder(newOrder))
   }
 }
+export const postWithCanceledOrder = (userId, orderId, updates) => {
+  return async dispatch => {
+    const {data: updatedOrder} = await axios.put(
+      `/api/users/${userId}/orders/${orderId}`, updates
+    )
+    dispatch(cancelOrder(updatedOrder))
+  }
+}
 
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -143,7 +153,7 @@ export default function(state = initialState, action) {
         ...state,
         currentOrder: action.order,
         orders: state.orders
-          .filter(elem => elem.status === 'Completed')
+          .filter(elem => elem.status !== 'Pending')
           .concat(action.order)
       }
     case UPDATE_QUANTITY:
@@ -151,7 +161,7 @@ export default function(state = initialState, action) {
         ...state,
         currentOrder: action.order,
         orders: state.orders
-          .filter(elem => elem.status === 'Completed')
+          .filter(elem => elem.status !== 'Pending')
           .concat(action.order)
       }
     case DELETE_ITEM:
@@ -159,7 +169,7 @@ export default function(state = initialState, action) {
         ...state,
         currentOrder: action.order,
         orders: state.orders
-          .filter(elem => elem.status === 'Completed')
+          .filter(elem => elem.status !== 'Pending')
           .concat(action.order)
       }
     case CHECKOUT_CURRENT_ORDER:
