@@ -170,14 +170,12 @@ class AllCelebrities extends React.Component {
                   onChange={this.updateFilter}
                 />
             <div className="collection-sort">
-               <div className="collection-sort">
-                <label>Filter By:</label>
-                  <select value={this.state.filterGender} onChange={this.updateGenderFilter}>
+                <label id="filter-by-label">Filter By:</label>
+                  <select id="custom-select" value={this.state.filterGender} onChange={this.updateGenderFilter}>
                     <option value="all">All</option>
                     <option value="Female">Female</option>
                     <option value="Male">Male</option>
                   </select>
-               </div>
             </div>
         </nav>
         <section className="products">{this.renderCelebrites()}</section>

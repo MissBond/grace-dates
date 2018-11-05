@@ -21,6 +21,10 @@ form div {
 }
 
 /* Nav header */
+.navbar {
+  display: flex;
+  padding: 10px;
+}
 
 nav {
   background-color: #000000;
@@ -30,6 +34,14 @@ nav a {
   display: inline-block;
   margin: 1em;
   color: #c3073f
+}
+
+.nav-bar-items {
+  display:flex;
+}
+
+.nav-bar-right {
+  margin-left:auto;
 }
 
 
@@ -42,6 +54,7 @@ nav a {
 
 .product-filter h1 {
   flex-grow: 1;
+  margin-left: 2%;
 }
 
 .sort {
@@ -51,7 +64,35 @@ nav a {
 .collection-sort {
   display: flex;
   flex-direction: column;
+  margin-left: -50%;
+  padding-top: 5%;
 }
+
+label#filter-by-label {
+  padding-bottom: 5%;
+}
+
+select#custom-select {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin-bottom: 10%;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 150px;
+}
+
 
 /* View All Page - Grid*/
 .products {
