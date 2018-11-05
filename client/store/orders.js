@@ -6,6 +6,42 @@ const initialState = {
   orders: []
 }
 
+//helper function for migrating cart
+// const identifyCartUpdates = (currentCart, userId) => {
+//   const unauthCart = JSON.parse(localStorage.cart)
+//   const unauthQuantities = JSON.parse(localStorage.quantities)
+//   if (unauthCart.length) {
+//     unauthCart.forEach(async celebrity => {
+//       for (let i = 0; i < currentCart.celebrities.length; i++) {
+//         if (celebrity.id === currentCart.celebrities[i].id) {
+//           let updates = {
+//             celebrityId: celebrity.id,
+//             updates: {
+//               quantity:
+//                 +currentCart.celebrities[i].celebrityOrder.quantity +
+//                 +unauthQuantities[celebrity.id]
+//             }
+//           }
+//           await axios.put(
+//             `/api/users/${userId}/orders/${currentCart.id}/celebrities`,
+//             updates
+//           )
+//         } else {
+//           let item = {
+//             orderId: currentCart.id,
+//             celebrityId: celebrity.id,
+//             quantity: unauthQuantities[celebrity.id]
+//           }
+//           await axios.post(
+//             `/api/users/${userId}/orders/${currentCart.id}/celebrities`,
+//             item
+//           )
+//         }
+//       }
+//     })
+//   }
+// }
+
 const GET_ALL_ORDERS = 'GET_ALL_ORDERS'
 const ADD_ITEM = 'ADD_ITEM'
 const DELETE_ITEM = 'DELETE_ITEM'
@@ -25,8 +61,11 @@ export const clearOrders = () => ({type: CLEAR_ORDERS})
 
 export const fetchAllOrders = userId => async dispatch => {
   try {
-    const {data: orders} = await axios.get(`/api/users/${userId}/orders`)
-    dispatch(getAllOrders(orders))
+    // const {data: orders} = await axios.get(`/api/users/${userId}/orders`)
+    // const currentCart = orders.filter(order => order.status === 'Pending')
+    // identifyCartUpdates(currentCart, userId)
+    const {data: updatedOrders} = await axios.get(`/api/users/${userId}/orders`)
+    dispatch(getAllOrders(updatedOrders))
   } catch (error) {
     console.log(error)
   }
@@ -66,11 +105,10 @@ export const fetchWithUpdatedQuantity = (
   return async dispatch => {
     try {
       const body = {
-        updates: {quantity: quantity},
-        celebrityId
+        quantity
       }
       const {data: updatedOrder} = await axios.put(
-        `/api/users/${userId}/orders/${orderId}/celebrities`,
+        `/api/users/${userId}/orders/${orderId}/celebrities/${celebrityId}`,
         body
       )
       dispatch(updateQuantity(updatedOrder))

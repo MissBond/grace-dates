@@ -31,7 +31,6 @@ class AllCelebrities extends React.Component {
     if (this.props.userId) {
       const addedItem = {
         orderId: this.state.cart.id,
-        userId: this.props.userId,
         celebrityId: item.id,
         quantity: quantity
       }
@@ -65,6 +64,7 @@ class AllCelebrities extends React.Component {
   }
 
   render() {
+    console.log('local storage', JSON.parse(localStorage.cart))
     const {celebrities, visibilityFilter} = this.props.celebrities
     const filteredCelebrities =
       visibilityFilter === 'All'

@@ -3,25 +3,29 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {fetchAllOrders} from '../store/orders'
 import UpdateUserForm from './updateUser'
+import {me} from '../store'
 
 /**
  * COMPONENT
  */
 
 class UserHome extends React.Component {
-  // componentDidUpdate(prevProps) {
-  //   if(prevProps.orders )
-  // }
+  componentDidUpdate() {
+    if (!this.props.orders.length) {
+      this.props.fetchOrders(this.props.userId)
+    }
+  }
 
   componentDidMount() {
+    this.props.loadInitialData()
     this.props.fetchOrders(this.props.userId)
   }
   render() {
+    console.log('orders length', this.props.orders.length)
     const cart = this.props.orders.filter(order => order.status === 'Pending')
     const orderHistory = this.props.orders.filter(
       order => order.status === 'Completed'
     )
-    console.log('cart in render', cart)
     return (
       <div>
         <div>
@@ -36,7 +40,8 @@ class UserHome extends React.Component {
           ) : (
             cart[0].celebrities.map(item => (
               <div key={item.id}>
-                Item: {item.firstName} {item.lastName}  Quantity: {item.celebrityOrder.quantity}
+                Item: {item.firstName} {item.lastName} Quantity:{' '}
+                {item.celebrityOrder.quantity}
               </div>
             ))
           )}
@@ -47,7 +52,28 @@ class UserHome extends React.Component {
             <div>No Order History</div>
           ) : (
             orderHistory.map(order => (
-              <div key={order.id}>Order Id: {order.id}</div>
+              <div key={order.id}>
+                <ol>
+                  <li>Order Number: {order.id}</li>
+                  <li>Items:</li>
+                  {order.celebrities.map(celebrity => {
+                    return (
+                      <div key={celebrity.id}>
+                        <p>
+                          Name: {celebrity.firstName} {celebrity.lastName}
+                        </p>
+                        <p>
+                          Name: {celebrity.firstName} {celebrity.lastName}
+                        </p>
+                        <p>
+                          Name: {celebrity.firstName} {celebrity.lastName}
+                        </p>
+                      </div>
+                    )
+                  })}
+                  <li />
+                </ol>
+              </div>
             ))
           )}
         </div>
@@ -73,7 +99,8 @@ const mapState = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOrders: userId => dispatch(fetchAllOrders(userId))
+    fetchOrders: (userId, currentCart) => dispatch(fetchAllOrders(userId)),
+    loadInitialData: () => dispatch(me())
   }
 }
 export default connect(mapState, mapDispatchToProps)(UserHome)

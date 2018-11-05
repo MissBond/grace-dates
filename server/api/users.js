@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.findById(+req.params.userId, {
-      attributes: ['id', 'email', 'firstName', 'lastName'],
+      attributes: ['id', 'email', 'firstName', 'lastName', 'isAdmin'],
       include: [Order]
     })
     if (user.orders.length) {
@@ -29,7 +29,7 @@ router.get('/:userId', async (req, res, next) => {
     } else {
       await Order.create({userId: user.id})
       const updatedUser = await User.findById(+req.params.userId, {
-        attributes: ['id', 'email', 'firstName', 'lastName'],
+        attributes: ['id', 'email', 'firstName', 'lastName', 'isAdmin'],
         include: [Order]
       })
       console.log('updatedUser in route', updatedUser)
@@ -76,7 +76,7 @@ router.put('/:userId', async (req, res, next) => {
 router.get('/:userId/orders', async (req, res, next) => {
   try {
     const orders = await Order.findAll({
-      where: {userId: req.params.userId},
+      where: {userId: +req.params.userId},
       include: [{model: Celebrity}]
     })
     res.json(orders)
@@ -139,16 +139,14 @@ router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
 
 //update a quantity once an item is in the cart
 
-router.put('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
+router.put('/:userId/orders/:orderId/celebrities/:celebrityId', async (req, res, next) => {
   try {
     const orderId = req.params.orderId
-    const celebrityId = req.body.celebrityId
-    console.log(req.params.orderId)
-    console.log(req.body)
+    const celebrityId = req.params.celebrityId
     const lineItem = await CelebrityOrder.find({
       where: {orderId, celebrityId}
     })
-    await lineItem.update(req.body.updates)
+    await lineItem.update(req.body)
     const updatedOrder = await Order.findById(orderId, {
       include: [{model: Celebrity}]
     })
@@ -158,7 +156,7 @@ router.put('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
   }
 })
 
-//to delete an item to a cart and send the revised cart back
+//to delete an item from a cart and send the revised cart back
 
 router.delete(
   '/:userId/orders/:orderId/celebrities/:celebrityId',

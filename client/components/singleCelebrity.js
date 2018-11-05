@@ -45,7 +45,6 @@ class SingleCelebrity extends React.Component {
 
   addToCart(item, quantity) {
     if (this.props.userId) {
-      console.log(this.state.cart.id)
       const addedItem = {
         orderId: this.state.cart.id,
         userId: this.props.userId,
@@ -64,7 +63,7 @@ class SingleCelebrity extends React.Component {
   render() {
     const {oneCelebrity} = this.props.celebrity
     const celebrity = oneCelebrity
-
+    console.log(this.props.isAdmin)
     return celebrity ? (
       <div id="celebrity-single-view-container">
         <h1>
