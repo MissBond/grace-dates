@@ -35,7 +35,7 @@ class AllCelebrities extends React.Component {
       filterGender: event.currentTarget.value
     })
   }
-  
+
   componentDidUpdate(prevState) {
     if (prevState.quantities !== this.state.quanities) {
       this.populateLocalStorage()
@@ -57,9 +57,9 @@ class AllCelebrities extends React.Component {
       }
       this.props.addItem(this.props.userId, this.state.cart.id, addedItem)
     } else {
-      let { cart, quantities } = this.state
+      let {cart, quantities} = this.state
       let subCart = cart.filter(elem => elem.id === item.id)
-      if (subCart.length){
+      if (subCart.length) {
         if (quantities[item.id]) {
           quantities[item.id] = Number(quantities[item.id]) + Number(quantity)
         } else {
@@ -115,7 +115,11 @@ class AllCelebrities extends React.Component {
       // Is the user looking for a particular name?
       if (filterValue.length > 0) {
         // Reject any celebrity who's name does not match our pattern
-        if (!pattern.test(celebrity.firstName)) return false
+        if (
+          !pattern.test(celebrity.firstName) ||
+          !pattern.test(celebrity.lastName)
+        )
+          return false
       }
       return true
     })
@@ -153,39 +157,35 @@ class AllCelebrities extends React.Component {
   }
 
   render() {
-    // const {celebrities, visibilityFilter} = this.props.celebrities
-    // const filteredCelebrities =
-    //   visibilityFilter === 'All'
-    //     ? celebrities
-    //     : visibilityFilter === 'Female'
-    //       ? celebrities.filter(celebrity => celebrity.gender === 'Female')
-    //       : celebrities.filter(celebrity => celebrity.gender === 'Male')
     return (
       <div>
         <nav className="product-filter">
           <h1>Choose Your Date!</h1>
-            <input
-                  type="text"
-                  placeholder="Search..."
-                  onChange={this.updateFilter}
-                />
+          <input
+            type="text"
+            placeholder="Search..."
+            onChange={this.updateFilter}
+          />
+          <div className="collection-sort">
             <div className="collection-sort">
-               <div className="collection-sort">
-                <label>Filter By:</label>
-                  <select value={this.state.filterGender} onChange={this.updateGenderFilter}>
-                    <option value="all">All</option>
-                    <option value="Female">Female</option>
-                    <option value="Male">Male</option>
-                  </select>
-               </div>
+              <label>Filter By:</label>
+              <select
+                value={this.state.filterGender}
+                onChange={this.updateGenderFilter}
+              >
+                <option value="all">All</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+              </select>
             </div>
+          </div>
         </nav>
         <section className="products">{this.renderCelebrites()}</section>
         {this.props.isAdmin && <AddCelebrityForm />}
       </div>
     )
- }
   }
+}
 
 const mapStateToProps = state => {
   return {
