@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Elements, StripeProvider} from 'react-stripe-elements';
-import CheckoutForm from './CheckoutForm';
+import Checkout from './checkout';
+// import CheckoutForm from './CheckoutForm';
 
 class AppStripe extends Component {
   render() {
@@ -9,7 +10,11 @@ class AppStripe extends Component {
         <div className="example">
           <h1>Checkout</h1>
           <Elements>
-            <CheckoutForm />
+            <Checkout
+              name={'The Road to learn React'}
+              description={'Only the Book'}
+              amount={1}
+            />
           </Elements>
         </div>
       </StripeProvider>
