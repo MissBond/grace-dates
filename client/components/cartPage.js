@@ -8,22 +8,46 @@ import {
   fetchWithUpdatedQuantity,
   fetchWithoutDeletedItem
 } from '../store/orders'
+import PromoCode from './promoCode'
+import axios from 'axios'
 
 class CartPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       cart: this.props.userId ? this.props.currentOrder.celebrities : [],
-      quantities: {}
+      quantities: {},
+      promoCodes: [],
+      selectedPromoCode: {},
+      validPromo: true
     }
     this.handleClick = this.handleClick.bind(this)
     this.handleUpdateClick = this.handleUpdateClick.bind(this)
     this.handleUpdateClickThunk = this.handleUpdateClickThunk.bind(this)
+    this.handlePromoCodeSubmit = this.handlePromoCodeSubmit.bind(this)
   }
 
   calculatePricePerMin(netWorth) {
     const minsPerYr = 525600
     return (netWorth * 100000 / minsPerYr).toFixed(2)
+  }
+
+  handlePromoCodeSubmit(event, promoCode) {
+    event.preventDefault()
+    console.log(this.state.promoCodes)
+    const selectedPromoCode = this.state.promoCodes.filter(
+      promo => promo.code === promoCode
+    )[0]
+    if (selectedPromoCode) {
+      this.setState({
+        selectedPromoCode: selectedPromoCode,
+        validPromo: true
+      })
+    } else {
+      this.setState({
+        validPromo: false
+      })
+    }
   }
 
   handleClick(celebrity) {
@@ -47,33 +71,36 @@ class CartPage extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const {data: promoCodes} = await axios.get('/api/promoCodes')
+    this.setState({
+      promoCodes: promoCodes
+    })
     this.props.userId
       ? this.setState({
           cart: this.props.currentOrder.celebrities
         })
-      : this.setState({
-          cart: JSON.parse(localStorage.getItem('cart')),
-          quantities: JSON.parse(localStorage.getItem('quantities'))
-        })
+      : JSON.parse(localStorage.getItem('cart'))
+        ? this.setState({
+            cart: JSON.parse(localStorage.getItem('cart')),
+            quantities: JSON.parse(localStorage.getItem('quantities'))
+          })
+        : this.setState({
+            cart: []
+          })
   }
 
   //this was an attempt to synchronously update UI for user workflow
   //currently causes an infinite loop
   //current app behavior: updates to the cart from the cart page are reflected in store, but not state
 
-  // componentDidUpdate(prevState) {
-  //   if (prevState.cart !== this.state.cart) {
-  //     this.props.userId ?
-  //     this.setState({
-  //       cart: this.props.currentOrder.celebrities
-  //     })
-  //     : this.setState({
-  //       cart: JSON.parse(localStorage.getItem('cart')),
-  //       quantities: JSON.parse(localStorage.getItem('quantities'))
-  //     })
-  //   }
-  // }
+  componentDidUpdate(prevState) {
+    if (prevState.currentOrder.celebrities !== this.props.currentOrder.celebrities) {
+      this.setState({
+        cart: this.props.currentOrder.celebrities
+      })
+    }
+  }
 
   handleUpdateClick(celebrityId, newQuantity) {
     let currentQuantities = {...this.state.quantities}
@@ -92,6 +119,7 @@ class CartPage extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     let {cart, quantities} = this.state
     return cart.length ? (
       <div>
@@ -159,22 +187,46 @@ class CartPage extends React.Component {
             )
           }, 0)}
         </div>
-        <Link to="/checkout">
-          <button onClick={() => <AppStripe />} type="button">
-            Checkout
-          </button>
-        </Link>
+        <div>
+          <PromoCode handleSubmit={this.handlePromoCodeSubmit} />
+        </div>
+        {this.state.validPromo === false && <div>Invalid promo code!</div>}
+        {this.state.selectedPromoCode.id && (
+          <div>
+            Total with Promo Code: ${cart.reduce((acc, celebrity) => {
+              return (
+                acc +
+                +(celebrity.celebrityOrder
+                  ? `${celebrity.celebrityOrder.quantity}`
+                  : quantities[celebrity.id]) *
+                  +this.calculatePricePerMin(celebrity.netWorthMillions)
+              )
+            }, 0) *
+              (1-(+this.state.selectedPromoCode.discountPercentage / 100))}
+          </div>
+        )}
+        <div>
+          <Link to="/checkout">
+            <button onClick={() => <AppStripe />} type="button">
+              Checkout
+            </button>
+          </Link>
+        </div>
       </div>
-    ) : <div>
-      <h3>It looks like your cart is empty!</h3>
-    </div>
+    ) : (
+      <div>
+        <h3>It looks like your cart is empty!</h3>
+      </div>
+    )
   }
 }
 
 const mapStateToProps = state => {
   return {
     currentOrder: state.orders.currentOrder,
-    userId: state.user.id
+    userId: state.user.id,
+    promoCodes: state.promoCodes.promoCodes,
+    selectedPromoCode: state.promoCodes.selectedPromoCode
   }
 }
 
