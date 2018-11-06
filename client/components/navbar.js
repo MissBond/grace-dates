@@ -4,11 +4,9 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout, clearOrders} from '../store'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
+const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
   <div>
-
     <nav>
-
       {isLoggedIn ? (
         <div className="navbar">
           {/* The navbar will show these links after you log in */}
@@ -16,6 +14,9 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             <Link className="nav-link" to="/home"><img className="logo-img" src="https://image.ibb.co/mh8Lsq/grace-Dates-Logo.png"/></Link>
             <Link className="nav-link" to="/home">Home</Link>
             <Link className="nav-link" to='/celebrities'>All Celebrities</Link>
+      {isAdmin ? (
+            <Link className="nav-link" to="/users">All Users</Link>
+            ) : null }
           </div>
           <div className="nav-bar-items nav-bar-right">
             <Link className="nav-link" to='/cart'>Cart</Link>
@@ -46,7 +47,8 @@ const Navbar = ({handleClick, isLoggedIn}) => (
  */
 const mapState = state => {
   return {
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    isAdmin: state.user.isAdmin
   }
 }
 

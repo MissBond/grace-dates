@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchAllCelebrities, setVisibilityFilter} from '../store/celebrities'
+import {fetchAllCelebrities} from '../store/celebrities'
 import {Link} from 'react-router-dom'
 import AddCelebrityForm from './addCelebrityForm'
 import {fetchAddedItem} from '../store/orders'
@@ -111,11 +111,25 @@ class AllCelebrities extends React.Component {
         // Reject any celebrity who's gender does not match.
         if (celebrity.gender !== filterGender) return false
       }
-
       // Is the user looking for a particular name?
       if (filterValue.length > 0) {
+        // reject the celebrity if neither the first or last name do not match.
+
         // Reject any celebrity who's name does not match our pattern
-        if (!pattern.test(celebrity.firstName)) return false
+        //const celebrityKeys = Object.keys(celebrity)
+        // const celebrityKeys = ['firstName', 'lastName', 'occupation']
+        // if (!celebrityKeys.some(key => pattern.test(celebrity[key]))) {
+        //   return false
+        // }
+
+        if (
+          !(
+            pattern.test(celebrity.firstName) ||
+            pattern.test(celebrity.lastName)
+          )
+        ) {
+          return false
+        }
       }
       return true
     })
@@ -191,7 +205,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     loadCelebrities: () => dispatch(fetchAllCelebrities()),
-    changeView: status => dispatch(setVisibilityFilter(status)),
+    // changeView: status => dispatch(setVisibilityFilter(status)),
     addItem: (userId, orderId, item) =>
       dispatch(fetchAddedItem(userId, orderId, item))
   }
