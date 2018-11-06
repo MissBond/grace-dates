@@ -171,7 +171,6 @@ class AllCelebrities extends React.Component {
                   </select>
                 </div>
             </div>
-          </div>
         </nav>
         <section className="products">{this.renderCelebrites()}</section>
         {this.props.isAdmin && <AddCelebrityForm />}
