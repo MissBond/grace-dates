@@ -12,14 +12,23 @@ import {Link} from 'react-router-dom'
  */
 
 class UserHome extends React.Component {
-  componentDidUpdate() {
-    if (!this.props.orders.length) {
-      this.props.fetchOrders(this.props.userId)
+  constructor(props) {
+    super(props)
+    this.state = {
+      orders: this.props.orders
     }
+  }
+  componentDidUpdate() {
+    console.log(this.props.orders.length, this.state.orders.length)
+    if (!this.props.orders.length && this.state.orders.length) {
+      const orders = this.props.fetchOrders(this.props.userId)
+      this.setState({orders})
+    } 
   }
   componentDidMount() {
     this.props.loadInitialData()
-    this.props.fetchOrders(this.props.userId)
+    const orders = this.props.fetchOrders(this.props.userId)
+    this.setState({orders})
   }
   calculatePricePerMin(netWorth) {
     const minsPerYr = 525600

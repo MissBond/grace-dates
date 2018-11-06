@@ -2,9 +2,68 @@ const router = require('express').Router()
 const {User, Order, CelebrityOrder, Celebrity} = require('../db/models')
 module.exports = router
 
-// router.use('/:userId/orders', require('./orders'))
+//users route protection
 
-router.get('/', async (req, res, next) => {
+const getUsersGuard = (req, res, next) => {
+    //only Admins can view all users
+    if (req.user && req.user.isAdmin) {
+      return next()
+    } else {
+      res
+        .status(403)
+        .send('Forbidden')
+    }
+  }
+
+const getOneUserGuard = (req, res, next) => {
+  if (req.user && (req.user.isAdmin || +req.user.id === +req.params.userId)) {
+    return next()
+  } else {
+    res.status(403).send('Forbidden')
+  }
+}
+
+const deleteUserGuard = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    return next()
+  } else {
+    res.status(403).send('Forbidden')
+  }
+}
+
+const updateUserGuard = (req, res, next) => {
+  if (req.user && (req.user.isAdmin || +req.user.id === +req.params.userId)) {
+    return next()
+  } else {
+    res.status(403).send('Forbidden')
+  }
+}
+
+const getUserOrdersGuard = (req, res, next) => {
+  if (req.user && (req.user.isAdmin || +req.user.id === +req.params.userId)) {
+    return next()
+  } else {
+    res.status(403).send('Forbidden')
+  }
+}
+
+const updateUserOrderGuard = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    return next()
+  } else {
+    res.status(403).send('Forbidden')
+  }
+}
+
+const postOrUpdateUserOrderGuard = (req, res, next) => {
+  if (req.user && +req.user.id === +req.params.userId) {
+    return next()
+  } else {
+    res.status(403).send('Forbidden')
+  }
+}
+
+router.get('/', getUsersGuard, async (req, res, next) => {
   try {
     const users = await User.findAll({
       // explicitly select only the id and email fields - even though
@@ -18,7 +77,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:userId', async (req, res, next) => {
+router.get('/:userId', getOneUserGuard, async (req, res, next) => {
   try {
     const user = await User.findById(+req.params.userId, {
       attributes: ['id', 'email', 'firstName', 'lastName', 'isAdmin'],
@@ -39,7 +98,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-router.delete('/:userId', function(req, res, next) {
+router.delete('/:userId', deleteUserGuard, function(req, res, next) {
   User.destroy({
     where: {
       id: req.params.userId
@@ -53,7 +112,7 @@ router.delete('/:userId', function(req, res, next) {
 
 //removed the isAdmin for now, but when we have the admin page where one can update users, we will need to revisit
 
-router.put('/:userId', async (req, res, next) => {
+router.put('/:userId', updateUserGuard, async (req, res, next) => {
   try {
     const updatedUser = await User.findById(+req.params.userId)
     await updatedUser.update({
@@ -72,7 +131,7 @@ router.put('/:userId', async (req, res, next) => {
 
 //orders
 
-router.get('/:userId/orders', async (req, res, next) => {
+router.get('/:userId/orders', getUserOrdersGuard, async (req, res, next) => {
   try {
     const orders = await Order.findAll({
       where: {userId: +req.params.userId},
@@ -84,7 +143,7 @@ router.get('/:userId/orders', async (req, res, next) => {
   }
 })
 
-router.get('/:userId/orders/:orderId', async (req, res, next) => {
+router.get('/:userId/orders/:orderId', getUserOrdersGuard, async (req, res, next) => {
   try {
     const orders = await Order.findById(req.params.orderId, {
       include: [{model: Celebrity}]
@@ -97,7 +156,7 @@ router.get('/:userId/orders/:orderId', async (req, res, next) => {
 
 //to change an order to completed
 
-router.put('/:userId/orders/:orderId', async (req, res, next) => {
+router.put('/:userId/orders/:orderId', updateUserOrderGuard, async (req, res, next) => {
   try {
     const orderId = req.params.orderId
     const userId = req.params.userId
@@ -113,7 +172,7 @@ router.put('/:userId/orders/:orderId', async (req, res, next) => {
 
 //to add an item to a cart and send the revised cart back
 
-router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
+router.post('/:userId/orders/:orderId/celebrities', postOrUpdateUserOrderGuard, async (req, res, next) => {
   try {
     const orderId = req.body.orderId
     const celebrityId = req.body.celebrityId
@@ -138,27 +197,30 @@ router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
 
 //update a quantity once an item is in the cart
 
-router.put('/:userId/orders/:orderId/celebrities/:celebrityId', async (req, res, next) => {
-  try {
-    const orderId = req.params.orderId
-    const celebrityId = req.params.celebrityId
-    const lineItem = await CelebrityOrder.find({
-      where: {orderId, celebrityId}
-    })
-    await lineItem.update(req.body)
-    const updatedOrder = await Order.findById(orderId, {
-      include: [{model: Celebrity}]
-    })
-    res.json(updatedOrder)
-  } catch (error) {
-    next(error)
+router.put(
+  '/:userId/orders/:orderId/celebrities/:celebrityId', postOrUpdateUserOrderGuard,
+  async (req, res, next) => {
+    try {
+      const orderId = req.params.orderId
+      const celebrityId = req.params.celebrityId
+      const lineItem = await CelebrityOrder.find({
+        where: {orderId, celebrityId}
+      })
+      await lineItem.update(req.body)
+      const updatedOrder = await Order.findById(orderId, {
+        include: [{model: Celebrity}]
+      })
+      res.json(updatedOrder)
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
 
 //to delete an item from a cart and send the revised cart back
 
 router.delete(
-  '/:userId/orders/:orderId/celebrities/:celebrityId',
+  '/:userId/orders/:orderId/celebrities/:celebrityId', postOrUpdateUserOrderGuard,
   async (req, res, next) => {
     try {
       const orderId = +req.params.orderId
