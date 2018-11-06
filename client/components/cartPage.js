@@ -140,16 +140,15 @@ class CartPage extends React.Component {
                   ? `${celebrity.celebrityOrder.quantity}`
                   : quantities[celebrity.id]}
                 <br />
-                Subtotal: ${+(celebrity.celebrityOrder
+                Subtotal: ${(+(celebrity.celebrityOrder
                   ? `${celebrity.celebrityOrder.quantity}`
                   : +quantities[celebrity.id]) *
-                  +this.calculatePricePerMin(celebrity.netWorthMillions)}
+                  +this.calculatePricePerMin(celebrity.netWorthMillions)).toFixed(2)}
                 <div>
                   <AddCart
                     quantities={quantities[celebrity.id]}
                     userId={this.props.userId}
                     addType="Update Quantity"
-                    // updateQuantity={this.props.updateQuantity}
                     celebrityId={celebrity.id}
                     orderId={this.props.currentOrder.id}
                     currentQuantity={
@@ -182,10 +181,10 @@ class CartPage extends React.Component {
               acc +
               +(celebrity.celebrityOrder
                 ? `${celebrity.celebrityOrder.quantity}`
-                : quantities[celebrity.id]) *
-                +this.calculatePricePerMin(celebrity.netWorthMillions)
+                : quantities[celebrity.id]) * 100 *
+                +this.calculatePricePerMin(celebrity.netWorthMillions) / 100
             )
-          }, 0)}
+          }, 0).toFixed(2)}
         </div>
         <div>
           <PromoCode handleSubmit={this.handlePromoCodeSubmit} />

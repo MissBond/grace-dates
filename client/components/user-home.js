@@ -60,7 +60,7 @@ class UserHome extends React.Component {
                     +this.calculatePricePerMin(celebrity.netWorthMillions)
                   )
                 )
-              }, 0)}
+              }, 0).toFixed(2)}
               <ol>
                 {cart[0].celebrities.map(celebrity => (
                   <div key={celebrity.id}>
