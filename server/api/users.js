@@ -1,5 +1,11 @@
 const router = require('express').Router()
-const {User, Order, CelebrityOrder, Celebrity} = require('../db/models')
+const {
+  User,
+  Order,
+  CelebrityOrder,
+  Celebrity,
+  PromoCodeUser
+} = require('../db/models')
 module.exports = router
 
 // router.use('/:userId/orders', require('./orders'))
@@ -95,17 +101,42 @@ router.get('/:userId/orders/:orderId', async (req, res, next) => {
   }
 })
 
-//to change an order to completed
+//to change an order to completed or cancelled
 
 router.put('/:userId/orders/:orderId', async (req, res, next) => {
   try {
     const orderId = req.params.orderId
     const userId = req.params.userId
-    const updates = req.body
+    const orderObj = req.body
+    const orderUpdates = orderObj.orderUpdates
     const orderToUpdate = await Order.findById(orderId)
-    await orderToUpdate.update(updates)
-    const newOrder = await Order.create({userId: userId})
-    res.json(newOrder)
+    await orderToUpdate.update(orderUpdates)
+    if (orderObj.type === 'Cancel') {
+      const updatedOrder = await Order.findById(orderId, {
+        include: [{model: Celebrity}]
+      })
+      res.json(updatedOrder)
+    } else {
+      const cart = await Order.create({userId: userId})
+      const celebrities = orderObj.celebrities
+      celebrities.forEach(async celebrity => {
+        const celebrityOrderToUpdate = await CelebrityOrder.find({
+          where: {orderId, celebrityId: celebrity.id}
+        })
+        const totalPurchasePrice = orderObj.promoCode
+          ? celebrityOrderToUpdate.totalPurchasePrice *
+            (orderObj.promoCode.discountPercentage / 100)
+          : celebrityOrderToUpdate.totalPurchasePrice
+        await celebrityOrderToUpdate.update({totalPurchasePrice})
+      })
+      if (orderObj.promoCode) {
+        await PromoCodeUser.create({userId, promoCodeId: orderObj.promoCode.id, promoUsed: true})
+      }
+      const updatedOrder = await Order.findById(orderId, {
+        include: [{model: Celebrity}]
+      })
+      res.json({updatedOrder, cart})
+    }
   } catch (err) {
     next(err)
   }
@@ -117,7 +148,7 @@ router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
   try {
     const orderId = req.body.orderId
     const celebrityId = req.body.celebrityId
-    const addQuantity = +req.body.quantity
+    const addQuantity = req.body.quantity
     const lineItem = await CelebrityOrder.find({
       where: {orderId, celebrityId}
     })
@@ -138,22 +169,25 @@ router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
 
 //update a quantity once an item is in the cart
 
-router.put('/:userId/orders/:orderId/celebrities/:celebrityId', async (req, res, next) => {
-  try {
-    const orderId = req.params.orderId
-    const celebrityId = req.params.celebrityId
-    const lineItem = await CelebrityOrder.find({
-      where: {orderId, celebrityId}
-    })
-    await lineItem.update(req.body)
-    const updatedOrder = await Order.findById(orderId, {
-      include: [{model: Celebrity}]
-    })
-    res.json(updatedOrder)
-  } catch (error) {
-    next(error)
+router.put(
+  '/:userId/orders/:orderId/celebrities/:celebrityId',
+  async (req, res, next) => {
+    try {
+      const orderId = req.params.orderId
+      const celebrityId = req.params.celebrityId
+      const lineItem = await CelebrityOrder.find({
+        where: {orderId, celebrityId}
+      })
+      await lineItem.update(req.body)
+      const updatedOrder = await Order.findById(orderId, {
+        include: [{model: Celebrity}]
+      })
+      res.json(updatedOrder)
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
 
 //to delete an item from a cart and send the revised cart back
 
