@@ -4,7 +4,6 @@ import UpdateCelebrity from './updateCelebrity'
 import {fetchCelebrity, removeSelectedCelebrity} from '../store'
 import Reviews from './reviews'
 import AddCart from './addCart'
-import {runInThisContext} from 'vm'
 import {fetchAddedItem} from '../store/orders'
 
 class SingleCelebrity extends React.Component {
@@ -12,7 +11,8 @@ class SingleCelebrity extends React.Component {
     super()
     this.state = {
       cart: [],
-      quantities: {}
+      quantities: {},
+      update: false
     }
     this.populateLocalStorage = this.populateLocalStorage.bind(this)
     this.addToCart = this.addToCart.bind(this)
@@ -75,7 +75,6 @@ class SingleCelebrity extends React.Component {
   render() {
     const {oneCelebrity} = this.props.celebrity
     const celebrity = oneCelebrity
-    console.log(this.props.isAdmin)
     return celebrity ? (
       <div id="celebrity-single-view-container">
         <h1>
@@ -95,7 +94,8 @@ class SingleCelebrity extends React.Component {
         <Reviews />
         {this.props.isAdmin && (
           <div>
-            <UpdateCelebrity />
+            <button type='button' onClick={() => this.setState({update: !this.state.update})}>Update Celebrity</button>
+            {this.state.update ? <UpdateCelebrity /> : null}
             <button
               onClick={() => this.props.deleted(celebrity.id)}
               type="button"
@@ -107,7 +107,7 @@ class SingleCelebrity extends React.Component {
         )}
       </div>
     ) : (
-      <p>no celeb</p>
+      <p>Celebrity deleted</p>
     )
   }
 }
@@ -124,7 +124,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetch: celebrityId => dispatch(fetchCelebrity(celebrityId)),
-    deleted: celebrity => dispatch(removeSelectedCelebrity(celebrity)),
+    deleted: celebrityId => dispatch(removeSelectedCelebrity(celebrityId)),
     addItem: (userId, orderId, item) =>
       dispatch(fetchAddedItem(userId, orderId, item))
   }

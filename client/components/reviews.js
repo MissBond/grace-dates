@@ -2,18 +2,26 @@ import React from 'react'
 import moment from 'moment'
 import {postReview, fetchReviews} from '../store'
 import {connect} from 'react-redux'
+import Rating from 'react-rating'
 
 class Reviews extends React.Component {
   constructor() {
     super()
     this.state = {
-      description: '',
-      date: '',
-      rating: 0,
-      header: ''
+      reviewObj: {
+        description: '',
+        rating: 2,
+        header: ''
+      },
+      review: false,
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleRatingChange = this.handleRatingChange.bind(this)
+  }
+
+  componentDidMount() {
+    this.props.fetchReviews(this.props.celebrityId)
   }
 
   componentDidUpdate(prevProps) {
@@ -23,9 +31,13 @@ class Reviews extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    })
+    let newReviewObj = Object.assign({}, this.state.reviewObj)
+    newReviewObj[event.target.name] = event.target.value
+    this.setState({...this.state, reviewObj: newReviewObj})
+  }
+
+  handleRatingChange(rating) {
+    this.setState({...this.state, reviewObj: {...this.state.reviewObj, rating}})
   }
 
   handleSubmit(event) {
@@ -33,16 +45,17 @@ class Reviews extends React.Component {
     this.props.postReview(
       this.props.userId,
       this.props.celebrityId,
-      this.state.header,
-      this.state.date,
-      this.state.rating,
-      this.state.description
+      this.state.reviewObj.header,
+      this.state.reviewObj.rating,
+      this.state.reviewObj.description
     )
     this.setState({
-      description: '',
-      date: '',
-      rating: 0,
-      header: ''
+      reviewObj: {
+        description: '',
+        rating: 2,
+        header: ''
+      },
+      review: false
     })
   }
 
@@ -52,53 +65,57 @@ class Reviews extends React.Component {
       <div>
         Customer Reviews:
         <ol>
-          {reviews.length
-            ? reviews.map(elem => {
-                return (
-                  <li key={elem.id}>
-                    <h3>
-                      {elem.header}: {elem.rating}
-                    </h3>
-                    <br />
-                    {moment(elem.updatedAt).format('MMM Do YYYY')}
-                    <br />
-                    {elem.description}
-                    <br />by {this.props.userFirstName}{' '}
-                    {this.props.userLastName}
-                  </li>
-                )
-              })
-            : null}
+          {reviews.length ? (
+            reviews.map(elem => {
+              console.log(elem)
+              return (
+                <li key={elem.id}>
+                  {elem.header}
+                  <br />
+                  Rated {elem.rating} out of 5
+                  <br />
+                  Posted {moment(elem.updatedAt).format('MMM Do YYYY')}
+                  <br />
+                  {elem.description}
+                  <br />by
+                  {elem.user ?
+                  ` ${elem.user.firstName} ${elem.user.lastName}` :
+                  ` ${this.props.userFirstName} ${this.props.userLastName}`
+                  }
+                </li>
+              )
+            })
+          ) : (
+            <h4>No reviews available</h4>
+          )}
         </ol>
         {this.props.userId && (
+          <button
+            type="button"
+            onClick={() => this.setState({review: !this.state.review})}
+          >
+            Write Review
+          </button>
+        )}
+        {this.state.review && (
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="header">Title</label>
             <input
               onChange={this.handleChange}
               type="text"
               name="header"
-              value={this.state.header}
+              value={this.state.reviewObj.header}
             />
-            <label htmlFor="date">Date</label>
-            <input
-              onChange={this.handleChange}
-              type="date"
-              name="date"
-              value={this.state.date}
-            />
-            <label htmlFor="rating">Rating</label>
-            <input
-              onChange={this.handleChange}
-              type="range"
+            <Rating
               name="rating"
-              value={this.state.rating}
-              min="0"
-              max="5"
+              value={this.state.reviewObj.rating}
+              onChange={this.handleRatingChange}
+              initialRating={this.state.reviewObj.rating}
             />
             <label htmlFor="description">Review</label>
             <textarea
               name="description"
-              value={this.state.description}
+              value={this.state.reviewObj.description}
               onChange={this.handleChange}
             />
             <button type="submit">Submit</button>
@@ -121,10 +138,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    postReview: (userId, celebrityId, header, date, rating, description) =>
-      dispatch(
-        postReview(userId, celebrityId, header, date, rating, description)
-      ),
+    postReview: (userId, celebrityId, header, rating, description) =>
+      dispatch(postReview(userId, celebrityId, header, rating, description)),
     fetchReviews: celebrityId => dispatch(fetchReviews(celebrityId))
   }
 }

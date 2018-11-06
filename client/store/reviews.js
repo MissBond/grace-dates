@@ -20,8 +20,8 @@ export const fetchReviews = (celebrityId) =>  async (dispatch) => {
     }
 }
 
-export const postReview = (userId, celebrityId, header, date, rating, description) => async (dispatch) => {
-    const review = {userId, celebrityId, header, date, rating, description}
+export const postReview = (userId, celebrityId, header, rating, description) => async (dispatch) => {
+    const review = {userId, celebrityId, header, rating, description}
     try {
         const { data: newReview } = await axios.post(`/api/celebrities/${celebrityId}/reviews`, review)
         dispatch(addReview(newReview))

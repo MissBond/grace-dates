@@ -18,7 +18,6 @@ const Review = db.define('review', {
   },
   date: {
     type: Sequelize.DATEONLY,
-    allowNull: false
   },
   description: {
     type: Sequelize.TEXT,
