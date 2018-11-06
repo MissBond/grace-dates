@@ -4,6 +4,28 @@ module.exports = router
 
 router.use('/:celebrityId/reviews', require('./reviews'))
 
+// const guard = (req, res, next) => {
+//   switch (req.path) {
+//     case '/':
+//     case '/:celebrityId/':
+//     case '/:celebrityId/reviews':
+//       if (req.method === 'GET') {
+//         return next();
+//       } else if (req.user && req.user.isAdmin && req.method !== 'GET') {
+//         return next()
+//       } else {
+//         res.status(403).send('Forbidden')
+//       }
+//       break;
+//     default:
+//       break
+//     }
+//   }
+
+
+// router.use(guard)
+
+
 router.get('/', async (req, res, next) => {
   try {
     const celebrities = await Celebrity.findAll()
