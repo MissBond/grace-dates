@@ -87,6 +87,11 @@ nav a {
   margin-top: auto;
 }
 
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
 @media (max-width: 920px) {
   .product-card {
     flex: 1 21%;

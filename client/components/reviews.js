@@ -72,7 +72,7 @@ class Reviews extends React.Component {
                 <li key={elem.id}>
                   {elem.header}
                   <br />
-                  Rated {elem.rating} out of 5
+                  Rated {elem.rating} out of 5 hearts!
                   <br />
                   Posted {moment(elem.updatedAt).format('MMM Do YYYY')}
                   <br />
@@ -111,6 +111,8 @@ class Reviews extends React.Component {
               value={this.state.reviewObj.rating}
               onChange={this.handleRatingChange}
               initialRating={this.state.reviewObj.rating}
+              emptySymbol={<img src="/images/heart_empty.png" className="icon" />}
+              fullSymbol={<img src="/images/heart_full.png" className="icon" />}
             />
             <label htmlFor="description">Review</label>
             <textarea
