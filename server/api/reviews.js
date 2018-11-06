@@ -1,11 +1,12 @@
 const router = require('express').Router()
-const {Review} = require('../db/models')
+const {Review, User} = require('../db/models')
 module.exports = router
 
 router.get('/reviews', async (req, res, next) => {
   try {
     const reviews = await Review.findAll({
-        where: {celebrityId: req.params.celebrityId}
+        where: {celebrityId: req.params.celebrityId},
+        include: [{model: User}]
     })
     res.json(reviews)
   } catch (err) {

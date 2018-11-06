@@ -8,15 +8,10 @@ import oneCelebrity from './single-celebrity'
 import orders from './orders'
 import reviews from './reviews'
 import userForAdmins from './userForAdmins'
+import promoCodes from './promoCodes'
 
-const reducer = combineReducers({
-  user,
-  celebrities,
-  oneCelebrity,
-  orders,
-  reviews,
-  userForAdmins
-})
+const reducer = combineReducers({user, celebrities, oneCelebrity, orders, reviews, promoCodes, userForAdmins})
+
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

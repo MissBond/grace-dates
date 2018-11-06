@@ -13,11 +13,25 @@ class UpdateCelebrity extends Component {
       gender: '',
       netWorthMillions: '',
       description: '',
-      isAvailable: ''
+      isAvailable: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
+
+  componentDidMount() {
+      this.setState({
+        firstName: this.props.selectedCelebrity.firstName,
+        lastName: this.props.selectedCelebrity.lastName,
+        imageUrl: this.props.selectedCelebrity.imageUrl,
+        occupation: this.props.selectedCelebrity.occupation,
+        gender: this.props.selectedCelebrity.gender,
+        netWorthMillions: this.props.selectedCelebrity.netWorthMillions,
+        description: this.props.selectedCelebrity.description,
+        isAvailable: this.props.selectedCelebrity.isAvailable
+      })
+    }
+  
 
   componentDidUpdate(prevState) {
     if (prevState.selectedCelebrity !== this.props.selectedCelebrity) {
@@ -59,7 +73,7 @@ class UpdateCelebrity extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <h3>Update Celebrtiy Information:</h3>
+        <h3>Update Celebrity Information:</h3>
         <div>
           <label htmlFor="firstName">First Name:</label>
           <input

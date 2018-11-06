@@ -12,21 +12,29 @@ import {Link} from 'react-router-dom'
  */
 
 class UserHome extends React.Component {
-  componentDidUpdate() {
-    if (!this.props.orders.length) {
-      this.props.fetchOrders(this.props.userId)
+  constructor(props) {
+    super(props)
+    this.state = {
+      orders: this.props.orders
     }
+  }
+  componentDidUpdate() {
+    console.log(this.props.orders.length, this.state.orders.length)
+    if (!this.props.orders.length && this.state.orders.length) {
+      const orders = this.props.fetchOrders(this.props.userId)
+      this.setState({orders})
+    } 
   }
   componentDidMount() {
     this.props.loadInitialData()
-    this.props.fetchOrders(this.props.userId)
+    const orders = this.props.fetchOrders(this.props.userId)
+    this.setState({orders})
   }
   calculatePricePerMin(netWorth) {
     const minsPerYr = 525600
     return (netWorth * 100000 / minsPerYr).toFixed(2)
   }
   render() {
-    console.log('orders length', this.props.orders.length)
     const cart = this.props.orders.filter(order => order.status === 'Pending')
     const orderHistory = this.props.orders.filter(
       order => order.status !== 'Pending'
@@ -52,7 +60,7 @@ class UserHome extends React.Component {
                     +this.calculatePricePerMin(celebrity.netWorthMillions)
                   )
                 )
-              }, 0)}
+              }, 0).toFixed(2)}
               <ol>
                 {cart[0].celebrities.map(celebrity => (
                   <div key={celebrity.id}>

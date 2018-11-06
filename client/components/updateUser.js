@@ -47,7 +47,6 @@ class UpdateUserForm extends Component {
 
   render() {
     const {form} = this.state
-    console.log(this.props)
     return (
       <div>
         <h2>Update User</h2>

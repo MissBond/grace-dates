@@ -47,33 +47,32 @@ class CartPage extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.props.userId
       ? this.setState({
           cart: this.props.currentOrder.celebrities
         })
-      : this.setState({
-          cart: JSON.parse(localStorage.getItem('cart')),
-          quantities: JSON.parse(localStorage.getItem('quantities'))
-        })
+      : JSON.parse(localStorage.getItem('cart'))
+        ? this.setState({
+            cart: JSON.parse(localStorage.getItem('cart')),
+            quantities: JSON.parse(localStorage.getItem('quantities'))
+          })
+        : this.setState({
+            cart: []
+          })
   }
 
   //this was an attempt to synchronously update UI for user workflow
   //currently causes an infinite loop
   //current app behavior: updates to the cart from the cart page are reflected in store, but not state
 
-  // componentDidUpdate(prevState) {
-  //   if (prevState.cart !== this.state.cart) {
-  //     this.props.userId ?
-  //     this.setState({
-  //       cart: this.props.currentOrder.celebrities
-  //     })
-  //     : this.setState({
-  //       cart: JSON.parse(localStorage.getItem('cart')),
-  //       quantities: JSON.parse(localStorage.getItem('quantities'))
-  //     })
-  //   }
-  // }
+  componentDidUpdate(prevState) {
+    if (prevState.currentOrder.celebrities !== this.props.currentOrder.celebrities) {
+      this.setState({
+        cart: this.props.currentOrder.celebrities
+      })
+    }
+  }
 
   handleUpdateClick(celebrityId, newQuantity) {
     let currentQuantities = {...this.state.quantities}
@@ -92,6 +91,7 @@ class CartPage extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     let {cart, quantities} = this.state
     return cart.length ? (
       <div>
@@ -112,16 +112,15 @@ class CartPage extends React.Component {
                   ? `${celebrity.celebrityOrder.quantity}`
                   : quantities[celebrity.id]}
                 <br />
-                Subtotal: ${+(celebrity.celebrityOrder
+                Subtotal: ${(+(celebrity.celebrityOrder
                   ? `${celebrity.celebrityOrder.quantity}`
                   : +quantities[celebrity.id]) *
-                  +this.calculatePricePerMin(celebrity.netWorthMillions)}
+                  +this.calculatePricePerMin(celebrity.netWorthMillions)).toFixed(2)}
                 <div>
                   <AddCart
                     quantities={quantities[celebrity.id]}
                     userId={this.props.userId}
                     addType="Update Quantity"
-                    // updateQuantity={this.props.updateQuantity}
                     celebrityId={celebrity.id}
                     orderId={this.props.currentOrder.id}
                     currentQuantity={
@@ -154,20 +153,24 @@ class CartPage extends React.Component {
               acc +
               +(celebrity.celebrityOrder
                 ? `${celebrity.celebrityOrder.quantity}`
-                : quantities[celebrity.id]) *
-                +this.calculatePricePerMin(celebrity.netWorthMillions)
+                : quantities[celebrity.id]) * 100 *
+                +this.calculatePricePerMin(celebrity.netWorthMillions) / 100
             )
-          }, 0)}
+          }, 0).toFixed(2)}
         </div>
-        <Link to="/checkout">
-          <button onClick={() => <AppStripe />} type="button">
-            Checkout
-          </button>
-        </Link>
+        <div>
+          <Link to="/checkout">
+            <button onClick={() => <AppStripe />} type="button">
+              Checkout
+            </button>
+          </Link>
+        </div>
       </div>
-    ) : <div>
-      <h3>It looks like your cart is empty!</h3>
-    </div>
+    ) : (
+      <div>
+        <h3>It looks like your cart is empty!</h3>
+      </div>
+    )
   }
 }
 

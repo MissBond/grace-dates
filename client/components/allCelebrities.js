@@ -171,24 +171,20 @@ class AllCelebrities extends React.Component {
       <div>
         <nav className="product-filter">
           <h1>Choose Your Date!</h1>
-          <input
-            type="text"
-            placeholder="Search..."
-            onChange={this.updateFilter}
-          />
-          <div className="collection-sort">
             <div className="collection-sort">
-              <label>Filter By:</label>
-              <select
-                value={this.state.filterGender}
-                onChange={this.updateGenderFilter}
-              >
-                <option value="all">All</option>
-                <option value="Female">Female</option>
-                <option value="Male">Male</option>
-              </select>
+                <div className="search-bar">
+                  <label id="search-label">Search:</label>
+                  <input type="text" placeholder="Type to search!" onChange={this.updateFilter}/>
+                </div>
+                <div className="filter-bar">
+                  <label id="filter-by-label">Filter By:</label>
+                  <select id="custom-select" value={this.state.filterGender} onChange={this.updateGenderFilter}>
+                    <option value="all">All</option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                  </select>
+                </div>
             </div>
-          </div>
         </nav>
         <section className="products">{this.renderCelebrites()}</section>
         {this.props.isAdmin && <AddCelebrityForm />}
