@@ -11,7 +11,7 @@ export class SingleUser extends React.Component {
 
   render() {
     const {singleUser} = this.props
-
+    console.log('This.is.single.user', singleUser)
     if (!singleUser) {
       return <div>Fetching user...</div>
     }
@@ -20,8 +20,9 @@ export class SingleUser extends React.Component {
       <main>
         <div>
           <h1>
-            {singleUser.firstName} {singleUser.lastName}
+            User Name: {singleUser.firstName} {singleUser.lastName}
           </h1>
+          <h3>email: {singleUser.email}</h3>
         </div>
 
         <div>

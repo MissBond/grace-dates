@@ -7,34 +7,37 @@ import ShoppingCart from './shoppingCart'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-
     <nav>
-
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
           <div id="nav-bar-left">
             <Link to="/home">Grace Dates</Link>
             <Link to="/home">Home</Link>
-            <Link to='/celebrities'>All Celebrities</Link>
+            <Link to="/celebrities">All Celebrities</Link>
+            <Link to="/users">All Users</Link>
           </div>
           <div id="nav-bar-right">
-            <Link to='/cart'>Cart</Link>
-            <a href="#" onClick={handleClick}>Logout</a>
+            <Link to="/cart">Cart</Link>
+            <a href="#" onClick={handleClick}>
+              Logout
+            </a>
           </div>
         </div>
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
           <div id="nav-bar-left">
-            <Link to="/home"><h1>Grace Dates</h1></Link>
+            <Link to="/home">
+              <h1>Grace Dates</h1>
+            </Link>
             <Link to="/home">Home</Link>
-            <Link to='/celebrities'>All Celebrities</Link>
+            <Link to="/celebrities">All Celebrities</Link>
           </div>
           <div id="nav-bar-right">
             <Link to="/login">Login</Link>
             <Link to="/signup">Sign Up</Link>
-            <Link to='/cart'>Cart</Link>
+            <Link to="/cart">Cart</Link>
           </div>
         </div>
       )}

@@ -111,11 +111,25 @@ class AllCelebrities extends React.Component {
         // Reject any celebrity who's gender does not match.
         if (celebrity.gender !== filterGender) return false
       }
-
       // Is the user looking for a particular name?
       if (filterValue.length > 0) {
+        // reject the celebrity if neither the first or last name do not match.
+
         // Reject any celebrity who's name does not match our pattern
-        if (!pattern.test(celebrity.firstName)) return false
+        //const celebrityKeys = Object.keys(celebrity)
+        // const celebrityKeys = ['firstName', 'lastName', 'occupation']
+        // if (!celebrityKeys.some(key => pattern.test(celebrity[key]))) {
+        //   return false
+        // }
+
+        if (
+          !(
+            pattern.test(celebrity.firstName) ||
+            pattern.test(celebrity.lastName)
+          )
+        ) {
+          return false
+        }
       }
       return true
     })

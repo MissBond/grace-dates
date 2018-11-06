@@ -35,8 +35,6 @@ class Routes extends Component {
         <Route path="/celebrities/:celebrityId" component={SingleCelebrity} />
         <Route path="/cart" component={CartPage} />
         <Route path="/checkout" component={AppStripe} />
-        <Route exact path="/users" component={AdminPage} />
-        <Route path="/users/:id" component={SingleUser} />
 
         {/* <Route exact path='/checkout' component={CheckoutForm} /> */}
 
@@ -44,6 +42,8 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            <Route exact path="/users" component={AdminPage} />
+            <Route path="/users/:id" component={SingleUser} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

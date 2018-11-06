@@ -14,7 +14,6 @@ export class AdminPage extends React.Component {
     console.log('these.are.users', users)
     return (
       <div>
-        <h1>Hello world</h1>
         <h2>Users</h2>
         <main>
           <ul>
