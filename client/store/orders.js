@@ -97,6 +97,7 @@ export const fetchWithUpdatedQuantity = (
 
 export const fetchUpdatedOrder = (userId, orderObj) => {
   return async dispatch => {
+    console.log('made it to thunk')
     const {data} = await axios.put(
       `/api/users/${userId}/orders/${orderObj.orderId}`,
       orderObj

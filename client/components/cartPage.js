@@ -8,46 +8,22 @@ import {
   fetchWithUpdatedQuantity,
   fetchWithoutDeletedItem
 } from '../store/orders'
-import PromoCode from './promoCode'
-import axios from 'axios'
 
 class CartPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       cart: this.props.userId ? this.props.currentOrder.celebrities : [],
-      quantities: {},
-      promoCodes: [],
-      selectedPromoCode: {},
-      validPromo: true
+      quantities: {}
     }
     this.handleClick = this.handleClick.bind(this)
     this.handleUpdateClick = this.handleUpdateClick.bind(this)
     this.handleUpdateClickThunk = this.handleUpdateClickThunk.bind(this)
-    this.handlePromoCodeSubmit = this.handlePromoCodeSubmit.bind(this)
   }
 
   calculatePricePerMin(netWorth) {
     const minsPerYr = 525600
     return (netWorth * 100000 / minsPerYr).toFixed(2)
-  }
-
-  handlePromoCodeSubmit(event, promoCode) {
-    event.preventDefault()
-    console.log(this.state.promoCodes)
-    const selectedPromoCode = this.state.promoCodes.filter(
-      promo => promo.code === promoCode
-    )[0]
-    if (selectedPromoCode) {
-      this.setState({
-        selectedPromoCode: selectedPromoCode,
-        validPromo: true
-      })
-    } else {
-      this.setState({
-        validPromo: false
-      })
-    }
   }
 
   handleClick(celebrity) {
@@ -71,11 +47,7 @@ class CartPage extends React.Component {
     }
   }
 
-  componentDidMount = async () => {
-    const {data: promoCodes} = await axios.get('/api/promoCodes')
-    this.setState({
-      promoCodes: promoCodes
-    })
+  componentDidMount = () => {
     this.props.userId
       ? this.setState({
           cart: this.props.currentOrder.celebrities
@@ -188,24 +160,6 @@ class CartPage extends React.Component {
           }, 0)}
         </div>
         <div>
-          <PromoCode handleSubmit={this.handlePromoCodeSubmit} />
-        </div>
-        {this.state.validPromo === false && <div>Invalid promo code!</div>}
-        {this.state.selectedPromoCode.id && (
-          <div>
-            Total with Promo Code: ${cart.reduce((acc, celebrity) => {
-              return (
-                acc +
-                +(celebrity.celebrityOrder
-                  ? `${celebrity.celebrityOrder.quantity}`
-                  : quantities[celebrity.id]) *
-                  +this.calculatePricePerMin(celebrity.netWorthMillions)
-              )
-            }, 0) *
-              (1-(+this.state.selectedPromoCode.discountPercentage / 100))}
-          </div>
-        )}
-        <div>
           <Link to="/checkout">
             <button onClick={() => <AppStripe />} type="button">
               Checkout
@@ -224,9 +178,7 @@ class CartPage extends React.Component {
 const mapStateToProps = state => {
   return {
     currentOrder: state.orders.currentOrder,
-    userId: state.user.id,
-    promoCodes: state.promoCodes.promoCodes,
-    selectedPromoCode: state.promoCodes.selectedPromoCode
+    userId: state.user.id
   }
 }
 
