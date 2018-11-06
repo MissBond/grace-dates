@@ -4,6 +4,8 @@ const Activity = require('./activity')
 const Review = require('./review')
 const Order = require('./order')
 const CelebrityOrder = require('./celebrity-order')
+const PromoCode = require('./promoCode')
+const PromoCodeUser = require('./promoCode-user')
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -21,11 +23,17 @@ Review.belongsTo(Celebrity)
 Celebrity.hasMany(Activity)
 Activity.belongsTo(Celebrity)
 
-Celebrity.belongsToMany(Order, {through: CelebrityOrder, foreignKey: "celebrityId"})
-Order.belongsToMany(Celebrity, {through: CelebrityOrder, foreignKey: "orderId"})
+Celebrity.belongsToMany(Order, {through: CelebrityOrder, foreignKey: 'celebrityId'})
+Order.belongsToMany(Celebrity, {through: CelebrityOrder, foreignKey: 'orderId'})
 
 User.hasMany(Order)
 Order.belongsTo(User)
+
+PromoCode.belongsToMany(User, {through: PromoCodeUser, foreignKey: 'promoCodeId'})
+User.belongsToMany(PromoCode, {through: PromoCodeUser, foreignKey: 'userId'})
+
+PromoCode.hasMany(Order)
+Order.belongsTo(PromoCode)
 
 module.exports = {
   User,
@@ -33,5 +41,7 @@ module.exports = {
   Activity,
   Review,
   Order,
-  CelebrityOrder
+  CelebrityOrder,
+  PromoCode,
+  PromoCodeUser
 }

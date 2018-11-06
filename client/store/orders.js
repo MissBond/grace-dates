@@ -6,68 +6,28 @@ const initialState = {
   orders: []
 }
 
-//helper function for migrating cart
-// const identifyCartUpdates = (currentCart, userId) => {
-//   const unauthCart = JSON.parse(localStorage.cart)
-//   const unauthQuantities = JSON.parse(localStorage.quantities)
-//   if (unauthCart.length) {
-//     unauthCart.forEach(async celebrity => {
-//       for (let i = 0; i < currentCart.celebrities.length; i++) {
-//         if (celebrity.id === currentCart.celebrities[i].id) {
-//           let updates = {
-//             celebrityId: celebrity.id,
-//             updates: {
-//               quantity:
-//                 +currentCart.celebrities[i].celebrityOrder.quantity +
-//                 +unauthQuantities[celebrity.id]
-//             }
-//           }
-//           await axios.put(
-//             `/api/users/${userId}/orders/${currentCart.id}/celebrities`,
-//             updates
-//           )
-//         } else {
-//           let item = {
-//             orderId: currentCart.id,
-//             celebrityId: celebrity.id,
-//             quantity: unauthQuantities[celebrity.id]
-//           }
-//           await axios.post(
-//             `/api/users/${userId}/orders/${currentCart.id}/celebrities`,
-//             item
-//           )
-//         }
-//       }
-//     })
-//   }
-// }
-
 const GET_ALL_ORDERS = 'GET_ALL_ORDERS'
 const ADD_ITEM = 'ADD_ITEM'
 const DELETE_ITEM = 'DELETE_ITEM'
 const UPDATE_QUANTITY = 'UPDATE_QUANTITY'
-const CHECKOUT_CURRENT_ORDER = 'CHECKOUT_CURRENT_ORDER'
-const CANCEL_ORDER = 'CANCEL_ORDER'
+const UPDATE_ORDER = 'UPDATE_ORDER'
 const CLEAR_ORDERS = 'CLEAR_ORDERS'
 
 export const getAllOrders = orders => ({type: GET_ALL_ORDERS, orders})
 export const addItem = order => ({type: ADD_ITEM, order})
 export const deleteItem = order => ({type: DELETE_ITEM, order})
 export const updateQuantity = order => ({type: UPDATE_QUANTITY, order})
-export const checkoutCurrentOrder = order => ({
-  type: CHECKOUT_CURRENT_ORDER,
-  order
+export const updateOrder = (updatedOrder, cart) => ({
+  type: UPDATE_ORDER,
+  updatedOrder,
+  cart
 })
-export const cancelOrder = order => ({type: CANCEL_ORDER, order})
 export const clearOrders = () => ({type: CLEAR_ORDERS})
 
 export const fetchAllOrders = userId => async dispatch => {
   try {
-    // const {data: orders} = await axios.get(`/api/users/${userId}/orders`)
-    // const currentCart = orders.filter(order => order.status === 'Pending')
-    // identifyCartUpdates(currentCart, userId)
-    const {data: updatedOrders} = await axios.get(`/api/users/${userId}/orders`)
-    dispatch(getAllOrders(updatedOrders))
+    const {data: orders} = await axios.get(`/api/users/${userId}/orders`)
+    dispatch(getAllOrders(orders))
   } catch (error) {
     console.log(error)
   }
@@ -79,7 +39,6 @@ export const fetchAddedItem = (userId, orderId, item) => {
         `/api/users/${userId}/orders/${orderId}/celebrities`,
         item
       )
-      console.log(updatedOrder)
       dispatch(addItem(updatedOrder))
     } catch (error) {
       console.log(error)
@@ -119,22 +78,33 @@ export const fetchWithUpdatedQuantity = (
     }
   }
 }
-export const postCompletedOrder = (user, orderId) => {
+
+// upon checkout, we will send an order object which will contain the orderId,
+// the promoCodeId, the orderUpdates and the celebrityOrder updates,
+// this route will also be used to cancel orders, so the req body will change
+// all costs will already be adjusted for DB (e.g. *100)
+// for the checkout path, a new pending order will be generated and passed to the front along with the updated order
+// type: checkout || cancel
+// orderId: currentOrder.id
+// promoCode: {
+//    id: selectedPromoCode.id,
+//    discountPercentage: selectedPromoCode.discountPercentage
+// orderUpdates: {
+//    status: 'Completed',
+//    orderCost: orderCost
+// }
+// celebrities: []
+
+export const fetchUpdatedOrder = (userId, orderObj) => {
   return async dispatch => {
-    const updates = {status: 'Completed'}
-    const {data: newOrder} = await axios.put(
-      `/api/users/${user.id}/orders/${orderId}`,
-      updates
+    console.log('made it to thunk')
+    const {data} = await axios.put(
+      `/api/users/${userId}/orders/${orderObj.orderId}`,
+      orderObj
     )
-    dispatch(checkoutCurrentOrder(newOrder))
-  }
-}
-export const postWithCanceledOrder = (userId, orderId, updates) => {
-  return async dispatch => {
-    const {data: updatedOrder} = await axios.put(
-      `/api/users/${userId}/orders/${orderId}`, updates
-    )
-    dispatch(cancelOrder(updatedOrder))
+    const updatedOrder = data.updatedOrder
+    const cart = data.cart ? data.cart : initialState.currentOrder
+    dispatch(updateOrder(updatedOrder, cart))
   }
 }
 
@@ -172,8 +142,14 @@ export default function(state = initialState, action) {
           .filter(elem => elem.status !== 'Pending')
           .concat(action.order)
       }
-    case CHECKOUT_CURRENT_ORDER:
-      return {...state, currentOrder: action.order}
+    case UPDATE_ORDER:
+      return {
+        ...state,
+        currentOrder: action.cart,
+        order: state.orders
+          .filter(order => order.id !== action.updatedOrder.id && order.status !== 'Pending')
+          .concat(action.updatedOrder, action.cart)
+      }
     case CLEAR_ORDERS:
       return {...state, orders: [], currentOrder: {}}
     default:

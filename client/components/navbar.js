@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout, clearOrders} from '../store'
-import ShoppingCart from './shoppingCart'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
@@ -11,30 +10,30 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     <nav>
 
       {isLoggedIn ? (
-        <div>
+        <div className="navbar">
           {/* The navbar will show these links after you log in */}
-          <div id="nav-bar-left">
-            <Link to="/home">Grace Dates</Link>
-            <Link to="/home">Home</Link>
-            <Link to='/celebrities'>All Celebrities</Link>
+          <div className="nav-bar-items">
+            <Link className="nav-link" to="/home"><img className="logo-img" src="https://image.ibb.co/mh8Lsq/grace-Dates-Logo.png"/></Link>
+            <Link className="nav-link" to="/home">Home</Link>
+            <Link className="nav-link" to='/celebrities'>All Celebrities</Link>
           </div>
-          <div id="nav-bar-right">
-            <Link to='/cart'>Cart</Link>
+          <div className="nav-bar-items nav-bar-right">
+            <Link className="nav-link" to='/cart'>Cart</Link>
             <a href="#" onClick={handleClick}>Logout</a>
           </div>
         </div>
       ) : (
-        <div>
+          <div className="navbar">
           {/* The navbar will show these links before you log in */}
-          <div id="nav-bar-left">
-            <Link to="/home"><h1>Grace Dates</h1></Link>
-            <Link to="/home">Home</Link>
-            <Link to='/celebrities'>All Celebrities</Link>
+          <div className="nav-bar-items">
+            <Link to="/home"><img className="logo-img" src="https://image.ibb.co/mh8Lsq/grace-Dates-Logo.png"/></Link>
+            <Link className="nav-link" to="/home">Home</Link>
+            <Link className="nav-link" to='/celebrities'>All Celebrities</Link>
           </div>
-          <div id="nav-bar-right">
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
-            <Link to='/cart'>Cart</Link>
+          <div className="nav-bar-items nav-bar-right">
+            <Link className="nav-link" to="/login">Login</Link>
+            <Link className="nav-link" to="/signup">Sign Up</Link>
+            <Link className="nav-link" to='/cart'>Cart</Link>
           </div>
         </div>
       )}

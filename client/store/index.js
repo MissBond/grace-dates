@@ -7,8 +7,9 @@ import celebrities from './celebrities'
 import oneCelebrity from './single-celebrity'
 import orders from './orders'
 import reviews from './reviews'
+import promoCodes from './promoCodes'
 
-const reducer = combineReducers({user, celebrities, oneCelebrity, orders, reviews})
+const reducer = combineReducers({user, celebrities, oneCelebrity, orders, reviews, promoCodes})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

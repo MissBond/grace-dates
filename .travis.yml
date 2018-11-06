@@ -24,12 +24,4 @@ deploy:
   provider: heroku
   app: grace-dates # see README
   api_key:
-    secure: OU61uOqOaZxl3ZpJ4cz6yyJnXGuPOs1C0zkYRjuPmiGr+7p+CNJCGI2F/Pan+BSqGp/33dlFucjP
-    secure: uzpNSsub9h51sdo+y8L/GjLA5QvhzGMGRU2/mjqBLTqqLKtee2ync0TU+37bXWw+V0qp7v4+Rmb1
-    secure: U6WCZ+QxN0TdO2pMpaxX9LZaPipDKAvCCTwJuFwsm2czb0gw2Xfv/4tio4WV7/zwGnFrb4nwehh4
-    secure: lebHk8KysUBBaPUmEDfaxRC5bdQDRVN9XokKnfK1MhNVwNcaC8aMUdTClzs+gRg6Ry8wK/dzkJqp
-    secure: N/WQx0AhX4GYIgBgeLPYW9f3i103b0nLPmnROAivPSfFYzGkt5zbqe019A84bMh+D8uDw2bqAcvt
-    secure: yhRnH6K/ye5CZSHLudJmqiXqNPbSY6a/3bZTF11jBTpkzyx7RX/K94AcB9LweoKGxF1gteX01RAo
-    secure: buhwAUptVAMmMIlgEIW3fTnHnDAhAXOpfove7zbCev4YUv8r++oQb0YRSN4LrUOfFtAw8lv6lFFe
-    secure: Qu9L7dYbVfRtwTd19I8OsAy7w7npcACznOBCm0m3pRznp6bPyFb9cBX9tV0M6X9ETclkX/UuxbX+
-    secure: A8YzF6QhhSypsO627hUgxOryRb3ygiik/KjGCJoKhHog8NCGITzKYqExFy4+STBaMmXDtuWW28s=
+    secure: "XAxga6cp4sj8awwzCKA1NCFJT9IuKaWzPFLMk2x+ezMYBWxsTGPvl1QZaGH2R9kQPYKOj90lS3kcFCUkS9whbttRGAMS9CrstAb3e864Lu6ZGNPucAZd7bP5Oep4tZgbiM31w0GRqhH4FvVCRK6hwc3X0uqnSx31Swj/SFm4Ggm+qtKuVHVxRbwkRUFF7iQiA/hqENIbGtlxADC/F/YPe+pGNjS42pxsUSBx0xd3jRjUXOzmM4rvImzcfIxddhJwzp6G1vlbztPcgB6TOUSojzdUbFrRSn4jBunf7XFeHzyW9NuUTxG6+N1UXRNsbRNWVZb+mfwkROjhV13jFvA4HqIVZNU8J1lOMTzaPboU1fBJLHEENvDEucHCiv9+dvo/BzRCxO2jVYSDNGhGuFWexR9ZtSkmeHEVbSzNb1wLMDViTLVUr2h08DlWM+B8/1wOrsMVKJ7lAXKkemjA7R8Xn4fzusjDnCHKfm4AoTqzV4O8jxrhoNvxeIMP74Ny3aErvfTVbifLYVlvkJxcSDtgpdpgHRYDpk3Mg1X0gJR1HS20N4VaMsorwRazYU50+mjMKotSw3JTQWp7LJ8UzMV3BLxC5uOO6yWOOo5ErepLlDF9zmKi7PgEKKw1yVZB7cW6s1hRsfiGklS0fEwqn2WOHydk7LTMhHKpWhkFUCGaEDo="

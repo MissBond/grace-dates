@@ -54,13 +54,12 @@ export const removeSelectedCelebrity = celebrityId => {
  */
 export default function(state = initialState, action) {
   switch (action.type) {
-    case GET_CELEBRITY:
+    case GET_CELEBRITY: 
       return {...state, oneCelebrity: action.celebrity}
-    case UPDATE_CELEBRITY:
+    case UPDATE_CELEBRITY: 
       return {...state, oneCelebrity: action.updatedCelebrity}
-        // return action.updatedCelebrity //this is a placeholder, we will need to update the list of celebrities in the store (i.e. update information by matching on id)
-    case REMOVE_CELEBRITY:
-      return {...state, celebrities: state.celebrities.filter(elem => elem.id !== action.id)}
+    case REMOVE_CELEBRITY: 
+      return {...state, oneCelebrity: null}
     default:
       return state
   }
