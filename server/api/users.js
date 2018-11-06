@@ -138,22 +138,25 @@ router.post('/:userId/orders/:orderId/celebrities', async (req, res, next) => {
 
 //update a quantity once an item is in the cart
 
-router.put('/:userId/orders/:orderId/celebrities/:celebrityId', async (req, res, next) => {
-  try {
-    const orderId = req.params.orderId
-    const celebrityId = req.params.celebrityId
-    const lineItem = await CelebrityOrder.find({
-      where: {orderId, celebrityId}
-    })
-    await lineItem.update(req.body)
-    const updatedOrder = await Order.findById(orderId, {
-      include: [{model: Celebrity}]
-    })
-    res.json(updatedOrder)
-  } catch (error) {
-    next(error)
+router.put(
+  '/:userId/orders/:orderId/celebrities/:celebrityId',
+  async (req, res, next) => {
+    try {
+      const orderId = req.params.orderId
+      const celebrityId = req.params.celebrityId
+      const lineItem = await CelebrityOrder.find({
+        where: {orderId, celebrityId}
+      })
+      await lineItem.update(req.body)
+      const updatedOrder = await Order.findById(orderId, {
+        include: [{model: Celebrity}]
+      })
+      res.json(updatedOrder)
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
 
 //to delete an item from a cart and send the revised cart back
 

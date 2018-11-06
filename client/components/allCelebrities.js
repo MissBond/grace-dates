@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchAllCelebrities, setVisibilityFilter} from '../store/celebrities'
+import {fetchAllCelebrities} from '../store/celebrities'
 import {Link} from 'react-router-dom'
 import AddCelebrityForm from './addCelebrityForm'
 import {fetchAddedItem} from '../store/orders'
@@ -195,7 +195,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     loadCelebrities: () => dispatch(fetchAllCelebrities()),
-    changeView: status => dispatch(setVisibilityFilter(status)),
+    // changeView: status => dispatch(setVisibilityFilter(status)),
     addItem: (userId, orderId, item) =>
       dispatch(fetchAddedItem(userId, orderId, item))
   }
