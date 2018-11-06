@@ -35,7 +35,6 @@ class UserHome extends React.Component {
     return (netWorth * 100000 / minsPerYr).toFixed(2)
   }
   render() {
-    console.log('orders length', this.props.orders.length)
     const cart = this.props.orders.filter(order => order.status === 'Pending')
     const orderHistory = this.props.orders.filter(
       order => order.status !== 'Pending'
