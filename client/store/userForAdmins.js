@@ -3,6 +3,7 @@ import axios from 'axios'
 //action types
 const GET_USERS = 'GET_USERS'
 const GET_SINGLE_USER = 'GET_SINGLE_USER'
+const UPDATE_USER = 'UPDATE_USER'
 
 //action creators
 
@@ -19,6 +20,7 @@ export const getSingleUser = user => {
     user: user
   }
 }
+const updateUser = user => ({type: UPDATE_USER, user})
 
 //thunk creators
 
@@ -45,6 +47,15 @@ export const fetchSingleUser = id => async dispatch => {
   }
 }
 
+export const fetchUpdatedUser = (userId, updates) => async dispatch => {
+  try {
+    const {data: user} = await axios.put(`/api/users/${userId}`, updates)
+    dispatch(updateUser(user))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 //reducer
 
 const initialState = {
@@ -57,6 +68,8 @@ export default function(state = initialState, action) {
     case GET_USERS:
       return {...state, users: action.users}
     case GET_SINGLE_USER:
+      return {...state, singleUser: action.user}
+    case UPDATE_USER:
       return {...state, singleUser: action.user}
     default:
       return state

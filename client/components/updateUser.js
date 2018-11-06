@@ -112,12 +112,6 @@ class UpdateUserForm extends Component {
   }
 }
 
-/* const mapState = state => {
-  return {
-    user: state.user
-  }
-} */
-
 const mapDispatch = dispatch => {
   return {
     updateUser: (userId, updates) => {
