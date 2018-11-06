@@ -22,7 +22,9 @@ class AddCart extends React.Component {
           event.preventDefault()
           this.props.addType === 'Add' ?
           this.props.addToCart(this.props.celebrity, this.state.quantity, this.props.addType) :
-          this.props.updateQuantity(this.props.userId, this.props.orderId, this.state.quantity, this.props.celebrityId)
+          this.props.userId ?
+            this.props.handleUpdateClickThunk(this.props.userId, this.props.orderId, this.state.quantity, this.props.celebrityId) :
+            this.props.handleUpdateClick(this.props.celebrityId, this.state.quantity)
         }}
       >
         {this.props.addType === 'Add' && 'Quantity: '}

@@ -11,7 +11,8 @@ class SingleCelebrity extends React.Component {
   constructor() {
     super()
     this.state = {
-      cart: []
+      cart: [],
+      quantities: {}
     }
     this.populateLocalStorage = this.populateLocalStorage.bind(this)
     this.addToCart = this.addToCart.bind(this)
@@ -45,7 +46,6 @@ class SingleCelebrity extends React.Component {
 
   addToCart(item, quantity) {
     if (this.props.userId) {
-      console.log(this.state.cart.id)
       const addedItem = {
         orderId: this.state.cart.id,
         userId: this.props.userId,
@@ -54,17 +54,28 @@ class SingleCelebrity extends React.Component {
       }
       this.props.addItem(this.props.userId, this.state.cart.id, addedItem)
     } else {
-      let cart = this.state.cart
-      cart.push(item)
+      let { cart, quantities } = this.state
+      let subCart = cart.filter(elem => elem.id === item.id)
+      if (subCart.length) {
+        if (quantities[item.id]) {
+          quantities[item.id] = Number(quantities[item.id]) + Number(quantity)
+        } else {
+          quantities[item.id] = quantity
+        }
+      } else {
+        cart.push(item)
+        quantities[item.id] = quantity
+      }
       localStorage.setItem('cart', JSON.stringify(cart))
-      this.setState(cart)
+      localStorage.setItem('quantities', JSON.stringify(quantities))
+      this.setState({cart, quantities})
     }
   }
 
   render() {
     const {oneCelebrity} = this.props.celebrity
     const celebrity = oneCelebrity
-
+    console.log(this.props.isAdmin)
     return celebrity ? (
       <div id="celebrity-single-view-container">
         <h1>

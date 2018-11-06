@@ -16,12 +16,12 @@ install:
 before_script:
   - psql -c 'create database "grace-dates-test";' -U postgres # remember to change this name if you change it elsewhere (e.g. package.json)
 
-# before_deploy:
-#   - npm run build-client # make the bundle
-#   - rm -rf node_modules # omit from the tarball, since we skip cleanup
-# deploy:
-#   skip_cleanup: true # prevents travis from deleting the build
-#   provider: heroku
-#   app: YOUR-HEROKU-APP-NAME-HERE # see README
-#   api_key:
-#     secure: YOUR-***ENCRYPTED***-API-KEY-HERE # see README
+before_deploy:
+  - npm run build-client # make the bundle
+  - rm -rf node_modules # omit from the tarball, since we skip cleanup
+deploy:
+  skip_cleanup: true # prevents travis from deleting the build
+  provider: heroku
+  app: grace-dates # see README
+  api_key:
+    secure: "XAxga6cp4sj8awwzCKA1NCFJT9IuKaWzPFLMk2x+ezMYBWxsTGPvl1QZaGH2R9kQPYKOj90lS3kcFCUkS9whbttRGAMS9CrstAb3e864Lu6ZGNPucAZd7bP5Oep4tZgbiM31w0GRqhH4FvVCRK6hwc3X0uqnSx31Swj/SFm4Ggm+qtKuVHVxRbwkRUFF7iQiA/hqENIbGtlxADC/F/YPe+pGNjS42pxsUSBx0xd3jRjUXOzmM4rvImzcfIxddhJwzp6G1vlbztPcgB6TOUSojzdUbFrRSn4jBunf7XFeHzyW9NuUTxG6+N1UXRNsbRNWVZb+mfwkROjhV13jFvA4HqIVZNU8J1lOMTzaPboU1fBJLHEENvDEucHCiv9+dvo/BzRCxO2jVYSDNGhGuFWexR9ZtSkmeHEVbSzNb1wLMDViTLVUr2h08DlWM+B8/1wOrsMVKJ7lAXKkemjA7R8Xn4fzusjDnCHKfm4AoTqzV4O8jxrhoNvxeIMP74Ny3aErvfTVbifLYVlvkJxcSDtgpdpgHRYDpk3Mg1X0gJR1HS20N4VaMsorwRazYU50+mjMKotSw3JTQWp7LJ8UzMV3BLxC5uOO6yWOOo5ErepLlDF9zmKi7PgEKKw1yVZB7cW6s1hRsfiGklS0fEwqn2WOHydk7LTMhHKpWhkFUCGaEDo="
