@@ -2,7 +2,7 @@ import axios from 'axios'
 
 //action types
 const GET_USERS = 'GET_USERS'
-const GET_USER = 'GET_USER'
+const GET_SINGLE_USER = 'GET_SINGLE_USER'
 
 //action creators
 
@@ -15,7 +15,7 @@ export const getUsers = users => {
 
 export const getSingleUser = user => {
   return {
-    type: GET_USER,
+    type: GET_SINGLE_USER,
     user: user
   }
 }
@@ -32,11 +32,16 @@ export const fetchUsers = () => async dispatch => {
 }
 
 export const fetchSingleUser = id => async dispatch => {
+  let response
+
   try {
-    const {data: user} = await axios.get(`/api/users/${id}`)
-    dispatch(getSingleUser(user))
+    response = await axios.get(`/api/users/${id}`)
   } catch (err) {
     console.log(err)
+  }
+
+  if (response.data) {
+    dispatch(getSingleUser(response.data))
   }
 }
 
@@ -44,14 +49,14 @@ export const fetchSingleUser = id => async dispatch => {
 
 const initialState = {
   users: [],
-  singleUser: {}
+  singleUser: null
 }
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_USERS:
       return {...state, users: action.users}
-    case GET_USER:
+    case GET_SINGLE_USER:
       return {...state, singleUser: action.user}
     default:
       return state

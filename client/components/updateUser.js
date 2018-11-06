@@ -8,42 +8,59 @@ import {fetchUpdatedUser} from '../store'
 class UpdateUserForm extends Component {
   constructor(props) {
     super(props)
+
+    const {user} = this.props
+
     this.state = {
-      firstName: this.props.user.firstName,
-      lastName: this.props.user.lastName,
-      password: ''
+      form: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isAdmin: user.isAdmin,
+        password: ''
+      }
     }
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
   }
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault()
-    console.log('update user event',event)
-    this.props.updateUser(this.props.user.id, this.state)
-    this.setState({
-      password: ''
-    })
+    console.log('update user event', event)
+
+    const {form} = this.state
+    const {user, updateUser} = this.props
+
+    updateUser(user.id, form)
+
+    form.password = ''
+    this.setState({form})
   }
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    })
+  handleChange = event => {
+    const {target} = event
+    const {form} = this.state // destructure form from state
+
+    // assign the value to the form object
+    form[target.name] =
+      target.type === 'checkbox' ? target.checked : target.value
+
+    this.setState({form}) // Tell react that the form object has changed
   }
 
   render() {
+    const {form} = this.state
     console.log(this.props)
     return (
       <div>
+        <h2>Update User</h2>
+
         <form onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="firstName">
               <small>First Name</small>
             </label>
             <input
+              id="firstName"
               name="firstName"
-              value={this.state.firstName}
+              value={form.firstName}
               onChange={this.handleChange}
               type="text"
             />
@@ -53,21 +70,37 @@ class UpdateUserForm extends Component {
               <small>Last Name</small>
             </label>
             <input
+              id="lastName"
               name="lastName"
-              value={this.state.lastName}
+              value={form.lastName}
               onChange={this.handleChange}
               type="text"
             />
           </div>
+
           <div>
             <label htmlFor="password">
               <small>Password</small>
             </label>
             <input
+              id="password"
               name="password"
-              value={this.state.password}
+              value={form.password}
               onChange={this.handleChange}
               type="password"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="isAdmin">
+              <small>Admin</small>
+            </label>
+            <input
+              id="isAdmin"
+              name="isAdmin"
+              checked={form.isAdmin}
+              onChange={this.handleChange}
+              type="checkbox"
             />
           </div>
           <div>
@@ -79,11 +112,11 @@ class UpdateUserForm extends Component {
   }
 }
 
-const mapState = state => {
+/* const mapState = state => {
   return {
     user: state.user
   }
-}
+} */
 
 const mapDispatch = dispatch => {
   return {
@@ -93,4 +126,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(UpdateUserForm)
+export default connect(null, mapDispatch)(UpdateUserForm)

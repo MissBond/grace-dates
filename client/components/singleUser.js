@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleUser} from '../store/userForAdmins'
+import UpdateUserForm from './updateUser'
 
 export class SingleUser extends React.Component {
   componentDidMount() {
@@ -9,13 +10,22 @@ export class SingleUser extends React.Component {
   }
 
   render() {
-    console.log('this.is.props', this.props)
-    const {user} = this.props
-    console.log('!!!!!', user)
+    const {singleUser} = this.props
+
+    if (!singleUser) {
+      return <div>Fetching user...</div>
+    }
+
     return (
       <main>
         <div>
-          <h1> hello world</h1>
+          <h1>
+            {singleUser.firstName} {singleUser.lastName}
+          </h1>
+        </div>
+
+        <div>
+          <UpdateUserForm user={singleUser} />
         </div>
       </main>
     )
@@ -23,7 +33,7 @@ export class SingleUser extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {student: state.users.singleUser}
+  return {singleUser: state.userForAdmins.singleUser}
 }
 
 const mapDispatchToProps = dispatch => {

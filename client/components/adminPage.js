@@ -10,9 +10,11 @@ export class AdminPage extends React.Component {
 
   render() {
     // console.log('AdminPageUsers', this.props.users)
-    const {users} = this.props.users
+    const {users} = this.props
+    console.log('these.are.users', users)
     return (
       <div>
+        <h1>Hello world</h1>
         <h2>Users</h2>
         <main>
           <ul>
@@ -33,7 +35,7 @@ export class AdminPage extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {users: state.users}
+  return {users: state.userForAdmins.users}
 }
 
 const mapDispatchToProps = dispatch => {

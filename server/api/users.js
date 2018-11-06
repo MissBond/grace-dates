@@ -55,16 +55,17 @@ router.delete('/:userId', function(req, res, next) {
 
 router.put('/:userId', async (req, res, next) => {
   try {
-    const updatedUser = await User.findById(+req.params.userId)
-    await updatedUser.update({
+    const user = await User.findById(+req.params.userId)
+
+    await user.update({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      password: req.body.password
+      password: req.body.password,
       // displayName: req.body.displayName,
       // email: req.body.email,
-      // isAdmin: req.body.isAdmin
+      isAdmin: req.body.isAdmin
     })
-    res.json(updatedUser)
+    res.json(user)
   } catch (err) {
     next(err)
   }
