@@ -1,8 +1,30 @@
 const router = require('express').Router()
-const {Celebrity, Activity, Review} = require('../db/models')
+const {Celebrity, Activity, Review, User} = require('../db/models')
 module.exports = router
 
 router.use('/:celebrityId/reviews', require('./reviews'))
+
+// const guard = (req, res, next) => {
+//   switch (req.path) {
+//     case '/':
+//     case '/:celebrityId/':
+//     case '/:celebrityId/reviews':
+//       if (req.method === 'GET') {
+//         return next();
+//       } else if (req.user && req.user.isAdmin && req.method !== 'GET') {
+//         return next()
+//       } else {
+//         res.status(403).send('Forbidden')
+//       }
+//       break;
+//     default:
+//       break
+//     }
+//   }
+
+
+// router.use(guard)
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -70,7 +92,9 @@ router.get('/:celebrityId/reviews', async (req, res, next) => {
     const reviews = await Review.findAll({
       where: {
         celebrityId: req.params.celebrityId
-      }
+      },
+        include: [{model: User}]
+      
     })
     res.json(reviews)
   } catch (error) {
