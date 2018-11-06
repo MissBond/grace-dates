@@ -3,6 +3,10 @@ import history from '../history'
 
 //function for migrating cart
 const identifyCartUpdates = (currentCart, userId) => {
+  if(!localStorage.cart) {
+    localStorage.setItem('quantities', JSON.stringify({}))
+    localStorage.setItem('cart', JSON.stringify([]))
+  }
   const unauthCart = JSON.parse(localStorage.cart)
   const unauthQuantities = JSON.parse(localStorage.quantities)
   //checking if any items in unauth cart
@@ -126,6 +130,7 @@ export const auth = (
     const currentCart = orders.filter(order => order.status === 'Pending')[0]
     identifyCartUpdates(currentCart, res.data.id)
     dispatch(getUser(res.data))
+    console.log('history', history)
     history.push('/home')
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr)

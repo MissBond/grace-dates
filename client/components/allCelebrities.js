@@ -57,9 +57,9 @@ class AllCelebrities extends React.Component {
       }
       this.props.addItem(this.props.userId, this.state.cart.id, addedItem)
     } else {
-      let { cart, quantities } = this.state
+      let {cart, quantities} = this.state
       let subCart = cart.filter(elem => elem.id === item.id)
-      if (subCart.length){
+      if (subCart.length) {
         if (quantities[item.id]) {
           quantities[item.id] = Number(quantities[item.id]) + Number(quantity)
         } else {
@@ -153,13 +153,6 @@ class AllCelebrities extends React.Component {
   }
 
   render() {
-    // const {celebrities, visibilityFilter} = this.props.celebrities
-    // const filteredCelebrities =
-    //   visibilityFilter === 'All'
-    //     ? celebrities
-    //     : visibilityFilter === 'Female'
-    //       ? celebrities.filter(celebrity => celebrity.gender === 'Female')
-    //       : celebrities.filter(celebrity => celebrity.gender === 'Male')
     return (
       <div>
         <nav className="product-filter">
@@ -178,13 +171,14 @@ class AllCelebrities extends React.Component {
                   </select>
                 </div>
             </div>
+          </div>
         </nav>
         <section className="products">{this.renderCelebrites()}</section>
         {this.props.isAdmin && <AddCelebrityForm />}
       </div>
     )
- }
   }
+}
 
 const mapStateToProps = state => {
   return {
