@@ -4,11 +4,11 @@ import StripeCheckout from 'react-stripe-checkout';
 
 import STRIPE_PUBLISHABLE from '../constants/stripe';
 import PAYMENT_SERVER_URL from '../constants/server';
+import CheckoutConfirmation from './checkoutConfirmation';
 
 const CURRENCY = 'USD';
-
 const fromEuroToCent = amount => amount * 100;
-
+let complete = false;
 
 const successPayment = data => {
   alert('Payment Successful');
@@ -29,8 +29,11 @@ const onToken = (amount, description) => token =>
     .then(successPayment)
     .catch(errorPayment);
 
+
+
 const Checkout = ({ name, description, amount }) =>
-  <StripeCheckout
+
+  <StripeCheckout onClick={() => !!complete}
     name={name}
     description={description}
     amount={fromEuroToCent(amount)}
@@ -38,5 +41,11 @@ const Checkout = ({ name, description, amount }) =>
     currency={CURRENCY}
     stripeKey={STRIPE_PUBLISHABLE}
   />
+
+//   if (complete === true) {
+//   <CheckoutConfirmation/>
+//   } else {
+//   // <div>Oh no! Looks like you haven't completed your payment. Continue payment now before your celeb's spot is booked!</div>
+// }
 
 export default Checkout;
