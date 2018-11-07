@@ -67,7 +67,6 @@ class Reviews extends React.Component {
         <ol>
           {reviews.length ? (
             reviews.map(elem => {
-              console.log(elem)
               return (
                 <li key={elem.id}>
                   {elem.header}

@@ -15,19 +15,18 @@ class UserHome extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      orders: this.props.orders
+      orders: []
     }
   }
-  componentDidUpdate() {
-    console.log(this.props.orders.length, this.state.orders.length)
+  async componentDidUpdate() {
     if (!this.props.orders.length && this.state.orders.length) {
-      const orders = this.props.fetchOrders(this.props.userId)
+      const orders = await this.props.fetchOrders(this.props.userId)
       this.setState({orders})
     }
   }
-  componentDidMount() {
+  async componentDidMount() {
     this.props.loadInitialData()
-    const orders = this.props.fetchOrders(this.props.userId)
+    const orders = await this.props.fetchOrders(this.props.userId)
     this.setState({orders})
   }
   calculatePricePerMin(netWorth) {
@@ -73,10 +72,10 @@ class UserHome extends React.Component {
                       <p>Quantity: {celebrity.celebrityOrder.quantity}</p>
                       <p>
                         Item Subtotal: $
-                        {+`${celebrity.celebrityOrder.quantity}` *
+                        {(+`${celebrity.celebrityOrder.quantity}` *
                           +this.calculatePricePerMin(
                             celebrity.netWorthMillions
-                          )}
+                          )).toFixed(2)}
                       </p>
                     </li>
                   </div>
@@ -151,7 +150,7 @@ const mapState = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOrders: (userId, currentCart) => dispatch(fetchAllOrders(userId)),
+    fetchOrders: userId => dispatch(fetchAllOrders(userId)),
     loadInitialData: () => dispatch(me())
   }
 }

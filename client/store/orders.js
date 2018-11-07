@@ -79,25 +79,8 @@ export const fetchWithUpdatedQuantity = (
   }
 }
 
-// upon checkout, we will send an order object which will contain the orderId,
-// the promoCodeId, the orderUpdates and the celebrityOrder updates,
-// this route will also be used to cancel orders, so the req body will change
-// all costs will already be adjusted for DB (e.g. *100)
-// for the checkout path, a new pending order will be generated and passed to the front along with the updated order
-// type: checkout || cancel
-// orderId: currentOrder.id
-// promoCode: {
-//    id: selectedPromoCode.id,
-//    discountPercentage: selectedPromoCode.discountPercentage
-// orderUpdates: {
-//    status: 'Completed',
-//    orderCost: orderCost
-// }
-// celebrities: []
-
 export const fetchUpdatedOrder = (userId, orderObj) => {
   return async dispatch => {
-    console.log('made it to thunk')
     const {data} = await axios.put(
       `/api/users/${userId}/orders/${orderObj.orderId}`,
       orderObj

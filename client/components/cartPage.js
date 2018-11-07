@@ -91,7 +91,6 @@ class CartPage extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     let {cart, quantities} = this.state
     return cart.length ? (
       <div>
