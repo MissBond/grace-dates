@@ -3,6 +3,7 @@ import moment from 'moment'
 import {postReview, fetchReviews} from '../store'
 import {connect} from 'react-redux'
 import Rating from 'react-rating'
+import FormGroup from 'react-bootstrap'
 
 class Reviews extends React.Component {
   constructor() {
@@ -62,8 +63,8 @@ class Reviews extends React.Component {
   render() {
     const {reviews} = this.props.reviews
     return (
-      <div>
-        Customer Reviews:
+      <div className="reviews">
+        <h3>Customer Reviews:</h3>
         <ol>
           {reviews.length ? (
             reviews.map(elem => {
@@ -96,9 +97,10 @@ class Reviews extends React.Component {
             Write Review
           </button>
         )}
+         <br/> <br/>
         {this.state.review && (
           <form onSubmit={this.handleSubmit}>
-            <label htmlFor="header">Title</label>
+           <label htmlFor="header">Title</label>
             <input
               onChange={this.handleChange}
               type="text"
@@ -106,6 +108,7 @@ class Reviews extends React.Component {
               value={this.state.reviewObj.header}
               required={true}
             />
+           <br/>
             <Rating
               name="rating"
               value={this.state.reviewObj.rating}
@@ -115,12 +118,15 @@ class Reviews extends React.Component {
               fullSymbol={<img src="/images/heart_full.png" className="icon" />}
             />
             <label htmlFor="description">Review</label>
+            <div className="reviews-body">
             <textarea
               name="description"
               value={this.state.reviewObj.description}
               onChange={this.handleChange}
               required={true}
             />
+            </div>
+             <br/>
             <button type="submit">Submit</button>
           </form>
         )}

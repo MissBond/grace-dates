@@ -10,32 +10,39 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
       {isLoggedIn ? (
         <div className="navbar">
           {/* The navbar will show these links after you log in */}
-          <div className="nav-bar-items">
-            <Link className="nav-link" to="/home"><img className="logo-img" src="https://image.ibb.co/mh8Lsq/grace-Dates-Logo.png"/></Link>
-            <Link className="nav-link" to="/home">Home</Link>
+            <Link className="navbar-link-brand" to="/homepage"><img className="logo-img" src="https://image.ibb.co/mh8Lsq/grace-Dates-Logo.png"/></Link>
+          <div className="nav-link nav-link-toggle">
+            <i className="fas fa-bars"/>
+          </div>
+          <nav className="nav-bar-items">
+            <Link className="nav-link" to="/homepage">Home</Link>
             <Link className="nav-link" to='/celebrities'>All Celebrities</Link>
       {isAdmin ? (
             <Link className="nav-link" to="/users">All Users</Link>
             ) : null }
-          </div>
-          <div className="nav-bar-items nav-bar-right">
+          </nav>
+          <nav className="nav-bar-items nav-bar-right">
             <Link className="nav-link" to='/cart'>Cart</Link>
-            <a href="#" onClick={handleClick}>Logout</a>
-          </div>
+            <a className ="nav-link" href="#" onClick={handleClick}>Logout</a>
+          </nav>
         </div>
       ) : (
           <div className="navbar">
           {/* The navbar will show these links before you log in */}
-          <div className="nav-bar-items">
-            <Link to="/home"><img className="logo-img" src="https://image.ibb.co/mh8Lsq/grace-Dates-Logo.png"/></Link>
-            <Link className="nav-link" to="/home">Home</Link>
-            <Link className="nav-link" to='/celebrities'>All Celebrities</Link>
-          </div>
-          <div className="nav-bar-items nav-bar-right">
-            <Link className="nav-link" to="/login">Login</Link>
-            <Link className="nav-link" to="/signup">Sign Up</Link>
-            <Link className="nav-link" to='/cart'>Cart</Link>
-          </div>
+
+            <Link className="nav-link navbar-link-brand" to="/homepage"><img className="logo-img" src="https://image.ibb.co/mh8Lsq/grace-Dates-Logo.png"/></Link>
+            <div className="nav-link nav-link-toggle">
+              <i className="fas fa-bars"/>
+            </div>
+            <nav className="nav-bar-items">
+              <Link className="nav-link" to="/homepage">Home</Link>
+              <Link className="nav-link" to='/celebrities'>All Celebrities</Link>
+            </nav>
+            <nav className="nav-bar-items nav-bar-right">
+              <Link className="nav-link" to="/login">Login</Link>
+              <Link className="nav-link" to="/signup">Sign Up</Link>
+              <Link className="nav-link" to='/cart'>Cart</Link>
+          </nav>
         </div>
       )}
     </nav>

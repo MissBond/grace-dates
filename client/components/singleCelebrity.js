@@ -77,21 +77,30 @@ class SingleCelebrity extends React.Component {
     const celebrity = oneCelebrity
     return celebrity ? (
       <div id="celebrity-single-view-container">
-        <h1>
+        <h1 className="product-name-single">
           {celebrity.firstName} {celebrity.lastName}
         </h1>
         <img className="celebrity-profile-img" src={celebrity.imageUrl} />
-        <h3>{celebrity.occupation}</h3>
-        <div>{celebrity.gender}</div>
-        <div>{celebrity.netWorthMillions}</div>
-        <p>{celebrity.description}</p>
+        <div className="product-details-single">
+          <h2 className="product-header-single">Get to know {celebrity.firstName} {celebrity.lastName}!</h2>
+          <h4>Super Celeb Powers:</h4>
+          <div className="product-occupation-single">{celebrity.occupation}</div>
+          <h4>Gender:</h4>
+          <div className="product-gender">{celebrity.gender}</div>
+          <h4>Net Worth:</h4>
+          <div className="product-networth">{celebrity.netWorthMillions}</div>
+          <h4>Celeb Quote:</h4>
+          <p className="product-description">"{celebrity.description}"</p>
+        </div>
+
         <AddCart
           celebrity={celebrity}
           cart={this.state.cart}
           addToCart={this.addToCart}
           addType="Add"
         />
-        <Reviews />
+        <div className="product-reviews-container"><Reviews/></div>
+        <div className="product-actions-single">
         {this.props.isAdmin && (
           <div>
             <button type='button' onClick={() => this.setState({update: !this.state.update})}>Update Celebrity</button>
@@ -105,6 +114,7 @@ class SingleCelebrity extends React.Component {
             </button>
           </div>
         )}
+        </div>
       </div>
     ) : (
       <p>Celebrity deleted</p>
