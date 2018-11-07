@@ -105,6 +105,7 @@ class Reviews extends React.Component {
               type="text"
               name="header"
               value={this.state.reviewObj.header}
+              required={true}
             />
             <Rating
               name="rating"
@@ -119,6 +120,7 @@ class Reviews extends React.Component {
               name="description"
               value={this.state.reviewObj.description}
               onChange={this.handleChange}
+              required={true}
             />
             <button type="submit">Submit</button>
           </form>
