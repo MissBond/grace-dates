@@ -114,7 +114,6 @@ class UserHome extends React.Component {
                           <p>Quantity: {celebrity.celebrityOrder.quantity}</p>
                           <p>
                             Item Subtotal: ${
-                              console.log(celebrity.celebrityOrder.totalPurchasePrice)
                               +celebrity.celebrityOrder
                               .totalPurchasePrice / 100}
                           </p>
