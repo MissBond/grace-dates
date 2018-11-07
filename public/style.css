@@ -219,6 +219,34 @@ img.celebrity-profile-img {
   border: 1px solid #000000;
 }
 
+/* User Page */
+
+.user-page {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 3%;
+}
+
+.user-welcome-heading {
+  color:#c3073f
+}
+
+h4#user-page-heading {
+  color: #950740;
+  font-weight: bold;
+  padding-top: 2.5%;
+}
+
+ol.user-page-cart-items li {
+  padding-top: 2%;
+}
+
+#update-user-form {
+  display: flex;
+  flex-direction: column;
+}
+
 .product-details-single * {
   padding-bottom: 5px;
 }
