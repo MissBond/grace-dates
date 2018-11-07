@@ -9,9 +9,7 @@ export class AdminPage extends React.Component {
   }
 
   render() {
-    // console.log('AdminPageUsers', this.props.users)
     const {users} = this.props
-    console.log('these.are.users', users)
     return (
       <div>
         <h2>Users</h2>

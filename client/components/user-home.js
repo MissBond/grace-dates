@@ -18,9 +18,7 @@ class UserHome extends React.Component {
       orders: []
     }
   }
-  async componentDidUpdate(prevProps) {
-    console.log('prev', prevProps.orders)
-    console.log('curr', this.props.orders)
+  async componentDidUpdate() {
     if (!this.props.orders.length && this.state.orders.length) {
       const orders = await this.props.fetchOrders(this.props.userId)
       this.setState({orders})

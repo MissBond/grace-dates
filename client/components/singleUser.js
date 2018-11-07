@@ -11,7 +11,6 @@ export class SingleUser extends React.Component {
 
   render() {
     const {singleUser} = this.props
-    console.log('This.is.single.user', singleUser)
     if (!singleUser) {
       return <div>Fetching user...</div>
     }
