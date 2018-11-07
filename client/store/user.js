@@ -3,7 +3,7 @@ import history from '../history'
 
 //function for migrating cart
 const identifyCartUpdates = (currentCart, userId) => {
-  if(!localStorage.cart) {
+  if (!localStorage.cart || !localStorage.quantities) {
     localStorage.setItem('quantities', JSON.stringify({}))
     localStorage.setItem('cart', JSON.stringify([]))
   }

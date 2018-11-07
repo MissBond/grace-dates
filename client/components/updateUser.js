@@ -10,31 +10,33 @@ class UpdateUserForm extends Component {
     super(props)
 
     const {user} = this.props
+    console.log('User', user)
 
     this.state = {
       form: {
         firstName: user.firstName,
         lastName: user.lastName,
-        isAdmin: user.isAdmin,
-        password: ''
+        isAdmin: user.isAdmin
+        // password: ''
       }
     }
   }
 
   handleSubmit = event => {
     event.preventDefault()
-    console.log('update user event', event)
 
     const {form} = this.state
     const {user, updateUser} = this.props
 
     updateUser(user.id, form)
+    console.log('form', form)
 
-    form.password = ''
+    // form.password = ''
     this.setState({form})
   }
 
   handleChange = event => {
+    console.log('this is form', this.state.form)
     const {target} = event
     const {form} = this.state // destructure form from state
 
@@ -77,7 +79,7 @@ class UpdateUserForm extends Component {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="password">
               <small>Password</small>
             </label>
@@ -88,20 +90,21 @@ class UpdateUserForm extends Component {
               onChange={this.handleChange}
               type="password"
             />
-          </div>
-
-          <div>
-            <label htmlFor="isAdmin">
-              <small>Admin</small>
-            </label>
-            <input
-              id="isAdmin"
-              name="isAdmin"
-              checked={form.isAdmin}
-              onChange={this.handleChange}
-              type="checkbox"
-            />
-          </div>
+          </div> */}
+          {this.props.user.isAdmin ? (
+            <div>
+              <label htmlFor="isAdmin">
+                <small>Admin</small>
+              </label>
+              <input
+                id="isAdmin"
+                name="isAdmin"
+                checked={form.isAdmin}
+                onChange={this.handleChange}
+                type="checkbox"
+              />
+            </div>
+          ) : null}
           <div>
             <button type="submit">Submit</button>
           </div>
