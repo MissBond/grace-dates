@@ -74,6 +74,7 @@ class UserHome extends React.Component {
                       <p>Quantity: {celebrity.celebrityOrder.quantity}</p>
                       <p>
                         Item Subtotal: $
+                        
                         {(+`${celebrity.celebrityOrder.quantity}` *
                           +this.calculatePricePerMin(
                             celebrity.netWorthMillions
@@ -112,7 +113,8 @@ class UserHome extends React.Component {
                           </p>
                           <p>Quantity: {celebrity.celebrityOrder.quantity}</p>
                           <p>
-                            Item Subtotal: ${+celebrity.celebrityOrder
+                            Item Subtotal: ${
+                              +celebrity.celebrityOrder
                               .totalPurchasePrice / 100}
                           </p>
                           <p>
