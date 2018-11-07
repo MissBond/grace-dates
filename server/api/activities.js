@@ -2,7 +2,7 @@ const router = require('express').Router()
 const {Celebrity, Activity} = require('../db/models')
 module.exports = router
 
-
+//not in use!
 router.get('/', async (req, res, next) => {
   try {
     const allActivities = await Activity.findAll({

@@ -54,7 +54,7 @@ const getUserOrdersGuard = (req, res, next) => {
 }
 
 const updateUserOrderGuard = (req, res, next) => {
-  if (req.user && req.user.isAdmin) {
+  if (req.user && req.user.isAdmin || +req.user.id === +req.params.userId) {
     return next()
   } else {
     res.status(403).send('Forbidden')
