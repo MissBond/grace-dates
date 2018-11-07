@@ -31,7 +31,6 @@ class AppStripe extends Component {
   }
 
   render() {
-    console.log('app stripe state', this.props)
     return !this.props.userId ? (
       <CheckoutLogin />
     ) : (

@@ -1,5 +1,6 @@
 /* global describe beforeEach it */
 
+//no longer used
 const {expect} = require('chai')
 const db = require('../index')
 const Activity = db.model('activity')
@@ -11,7 +12,7 @@ describe('Activity model', () => {
 
   describe('Validations', () => {
     //prevent null first name
-    it('requires activity name', async () => {
+    it.skip('requires activity name', async () => {
       const activity = Activity.build({
         price: 4.00
       })
@@ -26,7 +27,7 @@ describe('Activity model', () => {
       }
     })
 
-    it('uses a default price if price is null', () => {
+    it.skip('uses a default price if price is null', () => {
         const activity = Activity.build({
           activityName: 'hiking'
         })

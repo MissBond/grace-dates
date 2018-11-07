@@ -38,6 +38,7 @@ nav a {
 
 a.nav-link {
   line-height: 3.2;
+  padding-right: 8px;
 }
 
 .nav-bar-items {
@@ -46,12 +47,54 @@ a.nav-link {
 
 .nav-bar-right {
   margin-left:auto;
-  padding-right: 3.5%;
 }
 
 img.logo-img {
   width: 200px;
 }
+
+.nav-link-toggle {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .nav-bar-items,
+  .navbar {
+    flex-direction: column;
+  }
+  .nav-bar-items {
+    display: none;
+  }
+  .nav-bar-right {
+    margin-left: 0;
+  }
+  .nav-link-toggle {
+    align-self: flex-end;
+    display: initial;
+    position: absolute;
+    cursor: pointer;
+  }
+  .navbar-toggleShow {
+    display: flex;
+  }
+}
+
+
+.fa, .fas {
+  color: #fff !important;
+}
+
+/* Sign Up */
+.sign-up-form, .login-form {
+  display: flex;
+  flex-direction: column;
+  margin: 3%;
+}
+
+#sign-up-heading, #login-heading, .sign-up-oauth {
+  margin: 3%
+}
+
 
 
 /* Homepage */
@@ -138,15 +181,13 @@ label#search-label, label#filter-by-label {
 }
 
 .product-card {
-  flex: 1 16%;
-}
-
-.product-image {
-  min-height: 260px;
+  flex: 1 25%;
 }
 
 .product-image img {
-  max-width: 100%;
+  width: 380px;
+  height: 320px;
+  overflow: hidden;
 }
 
 .product-info {
@@ -160,7 +201,7 @@ label#search-label, label#filter-by-label {
 
 @media (max-width: 920px) {
   .product-card {
-    flex: 1 32%;
+    flex: 1 44%;
   }
   .product-image {
     min-height: 150px;
@@ -170,8 +211,6 @@ label#search-label, label#filter-by-label {
 /* Product Page */
 
 #celebrity-single-view-container {
-  /* display: flex; */
-  /* flex-grow: 1; */
   text-align: center;
 }
 
@@ -206,4 +245,69 @@ ol.user-page-cart-items li {
 #update-user-form {
   display: flex;
   flex-direction: column;
+}
+
+.product-details-single * {
+  padding-bottom: 5px;
+}
+
+h2.product-header-single {
+  color: #c3073f;
+}
+
+.product-actions-single * {
+  margin: 1%;
+}
+
+.product-reviews-container {
+  margin: 2%;
+}
+
+.product-reviews-container {
+  border-top: 1px solid;
+}
+
+.reviews * {
+  padding: 4px;
+}
+
+
+/* cart */
+.cart {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 10%;
+  margin-top: 3%;
+}
+
+.cart img {
+  vertical-align: middle;
+  width: 150px;
+  height: 150px;
+  float: right;
+  margin-left: -100px;
+  margin-right: 65%;
+}
+
+h2.cart-heading {
+  margin-bottom: 3%;
+}
+
+.checkout-button {
+  margin-bottom: 5%;
+}
+
+.checkout-message {
+  font-size: 20px;
+}
+
+#empty-cart-message {
+  text-align: center;
+  margin: 5%;
+}
+
+.checkout-not-logged-in {
+  text-align: center;
+  margin: 3%;
 }

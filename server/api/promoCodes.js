@@ -2,6 +2,7 @@ const router = require('express').Router()
 const {PromoCode} = require('../db/models')
 module.exports = router
 
+//not in use!
 router.get('/', async (req, res, next) => {
   try {
     const promoCodes = await PromoCode.findAll()

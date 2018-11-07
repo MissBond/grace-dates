@@ -5,9 +5,11 @@ const CheckoutLogin = () => {
 
     return (
       <div>
+        <div className="checkout-not-logged-in">
         <div className="checkout-message">Please login or sign up to complete your purchase</div>
         <Link className="nav-link" to="/login">Login</Link>
         <Link className="nav-link" to="/signup">Sign Up</Link>
+        </div>
       </div>
     )
 }

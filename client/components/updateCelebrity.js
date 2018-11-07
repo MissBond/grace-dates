@@ -81,6 +81,7 @@ class UpdateCelebrity extends Component {
             name="firstName"
             value={this.state.firstName}
             onChange={this.handleChange}
+            required={true}
           />
         </div>
         <div>
@@ -90,6 +91,7 @@ class UpdateCelebrity extends Component {
             name="lastName"
             value={this.state.lastName}
             onChange={this.handleChange}
+            required={true}
           />
         </div>
         <div>
@@ -99,6 +101,7 @@ class UpdateCelebrity extends Component {
             name="imageUrl"
             value={this.state.imageUrl}
             onChange={this.handleChange}
+            required={true}
           />
         </div>
         <div>
@@ -108,6 +111,7 @@ class UpdateCelebrity extends Component {
             name="occupation"
             value={this.state.occupation}
             onChange={this.handleChange}
+            required={true}
           />
         </div>
         <div>
@@ -117,6 +121,7 @@ class UpdateCelebrity extends Component {
             name="gender"
             id="male"
             value={this.state.gender}
+            required={true}
           />
           <label htmlFor="male">Male</label>
           <input
@@ -143,6 +148,7 @@ class UpdateCelebrity extends Component {
             name="netWorthMillions"
             value={this.state.netWorthMillions}
             onChange={this.handleChange}
+            required={true}
           />
         </div>
         <div>
@@ -151,6 +157,7 @@ class UpdateCelebrity extends Component {
             name="description"
             value={this.state.description}
             onChange={this.handleChange}
+            required={true}
           />
         </div>
         <div>

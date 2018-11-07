@@ -10,7 +10,8 @@ const SignupForm = props => {
   const {name, displayName, handleSubmit, error} = props
   return (
     <div>
-      <form onSubmit={handleSubmit} name={name}>
+      <h2 id="sign-up-heading">Sign up today!</h2>
+      <form className="sign-up-form" onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="firstName">
             <small>First Name</small>
@@ -40,7 +41,9 @@ const SignupForm = props => {
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
+      <div className="sign-up-oauth">
+        <a href="/auth/google">{displayName} with Google</a>
+      </div>
     </div>
   )
 }

@@ -37,7 +37,8 @@ describe('User model', () => {
     it('requires first name', async () => {
       const user = User.build({
         lastName: 'Test',
-        email: 'test@test.com'
+        email: 'test@test.com',
+        isAdmin: false
       })
 
       try {
@@ -54,7 +55,8 @@ describe('User model', () => {
     it('requires last name', async () => {
       const user = User.build({
         firstName: 'Test',
-        email: 'test@test.com'
+        email: 'test@test.com',
+        isAdmin: false
       })
 
       try {
@@ -71,7 +73,8 @@ describe('User model', () => {
     it('requires email', async () => {
       const user = User.build({
         firstName: 'Test',
-        lastName: 'Test'
+        lastName: 'Test',
+        isAdmin: false
       })
 
       try {
@@ -89,7 +92,8 @@ describe('User model', () => {
       const user = User.build({
         firstName: 'Test',
         lastName: 'Test',
-        email: 'test.com'
+        email: 'test.com',
+        isAdmin: false
       })
 
       try {
@@ -101,7 +105,26 @@ describe('User model', () => {
         expect(err.message).to.contain('Validation isEmail on email failed')
       }
     })
+
+    it ('requires valid, boolean T/F isAdmin status', async () => {
+      const user = User.build({
+        firstName: 'Test',
+        lastName: 'Test',
+        email: 'test@test.com',
+        isAdmin: 3
+      })
+
+      try {
+        await user.validate()
+        throw Error(
+          'validation was successful but should have failed with invalid isAdmin status'
+        )
+      } catch (err) {
+        expect(err.message).to.contain('failed')
+      }
+    })
   })
+
 
   //describe hook
   describe('Hooks', () => {

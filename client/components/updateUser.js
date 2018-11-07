@@ -10,7 +10,6 @@ class UpdateUserForm extends Component {
     super(props)
 
     const {user} = this.props
-    console.log('User', user)
 
     this.state = {
       form: {
@@ -29,14 +28,12 @@ class UpdateUserForm extends Component {
     const {user, updateUser} = this.props
 
     updateUser(user.id, form)
-    console.log('form', form)
 
     // form.password = ''
     this.setState({form})
   }
 
   handleChange = event => {
-    console.log('this is form', this.state.form)
     const {target} = event
     const {form} = this.state // destructure form from state
 

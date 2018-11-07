@@ -91,16 +91,18 @@ class CartPage extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     let {cart, quantities} = this.state
     return cart.length ? (
       <div>
+        <div className="cart">
+         <h2 className="cart-heading">Shopping Cart</h2>
         <ol>
           {cart.map((celebrity, i) => (
             // !this.props.userId ?
             // quantities[celebrity.id] && (
             <div key={i}>
               <li key={celebrity.id}>
+                <img src={celebrity.imageUrl} />
                 <Link to={`/celebrities/${celebrity.id}`}>{`${
                   celebrity.firstName
                 } ${celebrity.lastName}`}</Link>
@@ -131,6 +133,7 @@ class CartPage extends React.Component {
                   />
                 </div>
                 <div>
+                  <br/>
                   <button
                     type="button"
                     onClick={() => {
@@ -141,13 +144,14 @@ class CartPage extends React.Component {
                   </button>
                 </div>
                 <br />
-                <img src={celebrity.imageUrl} />
               </li>
               <br />
+              <hr/>
             </div>
           ))}
         </ol>
         <div>
+
           Total: ${cart.reduce((acc, celebrity) => {
             return (
               acc +
@@ -158,17 +162,18 @@ class CartPage extends React.Component {
             )
           }, 0).toFixed(2)}
         </div>
-        <div>
+        <div className="checkout-button">
           <Link to="/checkout">
             <button onClick={() => <AppStripe />} type="button">
               Checkout
             </button>
           </Link>
         </div>
+        </div>
       </div>
     ) : (
       <div>
-        <h3>It looks like your cart is empty!</h3>
+        <h3 id="empty-cart-message">It looks like your cart is empty!</h3>
       </div>
     )
   }
