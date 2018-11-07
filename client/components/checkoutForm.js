@@ -110,7 +110,7 @@ class CheckoutForm extends Component {
         <h3>Hurry and complete your payment! Your celeb date can't wait!</h3>
         <form>
           <div className="checkout-total">
-            Order Total: {this.state.orderTotal}
+            Order Total: ${this.state.orderTotal}
           </div>
         </form>
         <div>
