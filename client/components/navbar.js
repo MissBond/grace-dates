@@ -22,6 +22,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
             ) : null }
           </nav>
           <nav className="nav-bar-items nav-bar-right">
+            <Link className="nav-link" to='/home'>My Account</Link>
             <Link className="nav-link" to='/cart'>Cart</Link>
             <a className ="nav-link" href="#" onClick={handleClick}>Logout</a>
           </nav>
