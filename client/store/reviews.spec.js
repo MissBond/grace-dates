@@ -54,7 +54,6 @@ describe('thunk creators', () => {
         postReview(newReview)
       )
       const actions = store.getActions()
-      console.log(actions)
       expect(actions[0].type).to.be.equal('ADD_REVIEW')
     })
   })
