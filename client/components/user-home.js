@@ -23,7 +23,7 @@ class UserHome extends React.Component {
     if (!this.props.orders.length && this.state.orders.length) {
       const orders = this.props.fetchOrders(this.props.userId)
       this.setState({orders})
-    } 
+    }
   }
   componentDidMount() {
     this.props.loadInitialData()
@@ -52,15 +52,17 @@ class UserHome extends React.Component {
             <div>No Items in Cart</div>
           ) : (
             <div>
-              Cart Total: ${cart[0].celebrities.reduce((acc, celebrity) => {
-                return (
-                  acc +
-                  +(
-                    +`${celebrity.celebrityOrder.quantity}` *
-                    +this.calculatePricePerMin(celebrity.netWorthMillions)
+              Cart Total: ${cart[0].celebrities
+                .reduce((acc, celebrity) => {
+                  return (
+                    acc +
+                    +(
+                      +`${celebrity.celebrityOrder.quantity}` *
+                      +this.calculatePricePerMin(celebrity.netWorthMillions)
+                    )
                   )
-                )
-              }, 0).toFixed(2)}
+                }, 0)
+                .toFixed(2)}
               <ol>
                 {cart[0].celebrities.map(celebrity => (
                   <div key={celebrity.id}>
@@ -70,7 +72,7 @@ class UserHome extends React.Component {
                       </p>
                       <p>Quantity: {celebrity.celebrityOrder.quantity}</p>
                       <p>
-                        Item Subtotal:{' '}$
+                        Item Subtotal: $
                         {+`${celebrity.celebrityOrder.quantity}` *
                           +this.calculatePricePerMin(
                             celebrity.netWorthMillions
@@ -104,7 +106,8 @@ class UserHome extends React.Component {
                       return (
                         <div key={celebrity.id}>
                           <p>
-                            Celebrity: {celebrity.firstName} {celebrity.lastName}
+                            Celebrity: {celebrity.firstName}{' '}
+                            {celebrity.lastName}
                           </p>
                           <p>Quantity: {celebrity.celebrityOrder.quantity}</p>
                           <p>
@@ -127,7 +130,7 @@ class UserHome extends React.Component {
         </div>
         <div>
           <h3>Update Information:</h3>
-          <UpdateUserForm userId={this.props.userId} />
+          <UpdateUserForm user={this.props.user} />
         </div>
       </div>
     )
@@ -141,7 +144,8 @@ const mapState = state => {
   return {
     email: state.user.email,
     userId: state.user.id,
-    orders: state.orders.orders
+    orders: state.orders.orders,
+    user: state.user
   }
 }
 
