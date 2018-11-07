@@ -51,9 +51,9 @@ class UpdateUserForm extends Component {
     const {form} = this.state
     return (
       <div>
-        <h2>Update User</h2>
+        <h4 id="user-page-heading">Update User</h4>
 
-        <form onSubmit={this.handleSubmit}>
+        <form id="update-user-form" onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="firstName">
               <small>First Name</small>

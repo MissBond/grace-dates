@@ -41,11 +41,12 @@ class UserHome extends React.Component {
     )
     return (
       <div>
+        <div className="user-page">
         <div>
-          <h3>Welcome, {this.props.email}</h3>
+          <h2 className="user-welcome-heading">Welcome, {this.props.email}</h2>
         </div>
         <div>
-          <h3>Current Cart:</h3>
+          <h4 id="user-page-heading">Current Cart:</h4>
           {cart.length === 0 ? (
             <div>Fetching Data</div>
           ) : cart[0].celebrities.length === 0 ? (
@@ -63,7 +64,8 @@ class UserHome extends React.Component {
                   )
                 }, 0)
                 .toFixed(2)}
-              <ol>
+
+              <ol className="user-page-cart-items">
                 {cart[0].celebrities.map(celebrity => (
                   <div key={celebrity.id}>
                     <li>
@@ -86,7 +88,7 @@ class UserHome extends React.Component {
           )}
         </div>
         <div>
-          <h3>Order History:</h3>
+        <h4 id="user-page-heading">Order History:</h4>
           {orderHistory.length === 0 ? (
             <div>No Order History</div>
           ) : (
@@ -129,9 +131,10 @@ class UserHome extends React.Component {
           )}
         </div>
         <div>
-          <h3>Update Information:</h3>
+        <h4 id="user-page-heading">Update Information:</h4>
           <UpdateUserForm user={this.props.user} />
         </div>
+      </div>
       </div>
     )
   }
